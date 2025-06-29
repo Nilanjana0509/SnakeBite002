@@ -1,5 +1,3 @@
-// Manage according to envenomation: P
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
@@ -157,9 +155,9 @@ const Level4 = ({ setCompletedLevels }) => {
     const level3Result = JSON.parse(localStorage.getItem("level3Result")) || [];
 
     // Determine the heading based on the code selection
-    if (level3Result.includes("H")) {
+    if (level3Result.some((code) => code === "h")) {
       setHeading("Options available for management, Select from below options (Haemotoxic envenomation selected)");
-    } else if (level3Result.includes("N")) {
+    } else if (level3Result.some((code) => code === "n")) {
       setHeading("Options available for management, Select from below options (Neurotoxic envenomation selected)");
     } else {
       setHeading("Options available for management");

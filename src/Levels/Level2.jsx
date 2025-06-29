@@ -16,11 +16,6 @@ const Level2 = ({ setCompletedLevels }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
 
-  // useEffect(() => {
-  //   const level2Result = JSON.parse(localStorage.getItem("level2Result")) || [];
-  //   if (level2Result) setLevel2Selection(level2Result);
-  // }, []);
-
   const initialDeck = [
     { id: 1, text: "Secure Respiration and Airway" },
     { id: 2, text: "Admit the patient" },
@@ -44,7 +39,6 @@ const Level2 = ({ setCompletedLevels }) => {
     { id: 11, text: "20 WBCT" },
   ];
 
-  // Shuffle function
   const shuffleDeck = (deck) => {
     for (let i = deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -53,7 +47,6 @@ const Level2 = ({ setCompletedLevels }) => {
     return deck;
   };
 
-  // Set shuffled deck on mount
   useEffect(() => {
     const shuffledDeck = shuffleDeck([...initialDeck]);
     setDeck(shuffledDeck);
@@ -115,7 +108,6 @@ const Level2 = ({ setCompletedLevels }) => {
 
   const handleSuccessClose = () => {
     setShowSuccessPopup(false);
-    handleCompleteLevel2();
   };
 
   const resetGame = () => {
@@ -124,32 +116,24 @@ const Level2 = ({ setCompletedLevels }) => {
     setSelectedCards3({});
     setSelectedCards4({});
     setSelectedCards5({});
-    setDeck(shuffleDeck([...initialDeck])); // Shuffle deck on reset
+    setDeck(shuffleDeck([...initialDeck]));
     setShowSuccessPopup(false);
     setShowWrongPopup(false);
   };
 
-  const handleCompleteLevel2 = (path = "/level3") => {
+  const handleCompleteLevel2 = (path) => {
     const completedLevels = {
       level1: true,
       level2: true,
-      level3: false,
+      level3: path === "/level3",
+      level4: false,
+      level5: path === "/level5",
     };
     localStorage.setItem("completedLevels", JSON.stringify(completedLevels));
     setCompletedLevels(completedLevels);
+    console.log("Navigating to:", path);
     navigate(path);
   };
-
-  // const codeSelection = () => {
-  //   const level2Result = JSON.parse(localStorage.getItem("level2Result")) || [];
-  //   for (let i = 0; i < level2Result.length; i++) {
-  //     if (level2Result[i] === "X") {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  //   // console.log(level2Result);
-  // };
 
   return (
     <div
@@ -159,14 +143,9 @@ const Level2 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
-      {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
@@ -201,11 +180,12 @@ const Level2 = ({ setCompletedLevels }) => {
           </div>
         ))}
       </div>
-        <div>
-          <h2 className="text-center text-3xl font-bold text-slate-50">
-            Select Correct options
-          </h2>
-        </div>
+
+      <div>
+        <h2 className="text-center text-3xl font-bold text-slate-50">
+          Select Correct options
+        </h2>
+      </div>
       <div className="flex flex-wrap justify-center gap-8 mt-4">
         {[
           selectedCards1,
@@ -223,42 +203,27 @@ const Level2 = ({ setCompletedLevels }) => {
         ))}
       </div>
 
-      {/* {showSuccessPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-              <h2 className="text-2xl font-bold text-green-600 mb-4">
-                Correct!
-              </h2>
-              {codeSelection() ? (
-                <button
-                  onClick={() => handleCompleteLevel2("/level4")} // Redirect to Level 4
-                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                >
-                  Sign of Envenomation
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleCompleteLevel2("/level5")} // Redirect to Level 5
-                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                >
-                  No Sign of Envenomation
-                </button>
-              )}
-            </div>
-          </div>
-        )} */}
-
       {showSuccessPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-            <h2 className="text-2xl font-bold text-green-600 mb-4">
-              Your choices are correct
-            </h2>
+          <div style={{ border: '2px solid #1E90FF', padding: '20px', backgroundColor: 'white', width: '400px', textAlign: 'center' }}>
+            <h2 style={{ color: '#FFA500' }}>Please Select the Path of treatment</h2>
             <button
-              onClick={() => handleCompleteLevel2("/level3")}
-              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+              onClick={() => {
+                handleCompleteLevel2("/level5");
+                setShowSuccessPopup(false);
+              }}
+              style={{ display: 'block', margin: '10px auto', backgroundColor: '#5C4033', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}
             >
-              Start specific management
+              No Envenomation
+            </button>
+            <button
+              onClick={() => {
+                handleCompleteLevel2("/level3");
+                setShowSuccessPopup(false);
+              }}
+              style={{ display: 'block', margin: '10px auto', backgroundColor: '#5C4033', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}
+            >
+              Possible Envenomation
             </button>
           </div>
         </div>
@@ -270,7 +235,6 @@ const Level2 = ({ setCompletedLevels }) => {
             <h2 className="text-2xl font-bold text-red-400 mb-4">
               Your choices are incorrect
             </h2>
-            {/* <p className="mb-6">You have selected the wrong sequence.</p> */}
             <button
               className="bg-red-400 text-white px-4 py-2 rounded-md"
               onClick={resetGame}

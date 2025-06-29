@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaClock, FaQuestionCircle } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
+import companyImage from "/Users/avijeetmukhoty/Documents/2025/Snake-Bite-Game/src/assets/images/WhatsApp Image 2025-06-29 at 10.19.05 PM.jpeg";
 
 const Level1 = ({ setCompletedLevels }) => {
   const location = useLocation();
-  const navigate = useNavigate(); // For navigation to next level
+  const navigate = useNavigate();
   const [deck, setDeck] = useState([]);
-  const [deckIndex, setDeckIndex] = useState(null); // Track the current deck index
+  const [deckIndex, setDeckIndex] = useState(null);
   const [selectedCards1, setSelectedCards1] = useState({});
   const [selectedCards2, setSelectedCards2] = useState({});
   const [selectedCards3, setSelectedCards3] = useState({});
@@ -16,24 +17,33 @@ const Level1 = ({ setCompletedLevels }) => {
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [result, SetResult] = useState([]);
   const [sc, setsc] = useState(0);
-  // const [countdown, setCountdown] = useState(3000);
+  const [showImage, setShowImage] = useState(true);
+  const [showRules, setShowRules] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+
+  // Handle image display for 30 seconds and transition to rules
+  useEffect(() => {
+    console.log("Image display started");
+    const timer = setTimeout(() => {
+      console.log("Image fading out after 30 seconds");
+      setShowImage(false);
+      setShowRules(true);
+    }, 30000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleCompleteLevel1 = () => {
-    // Mark level 1 as completed
     const completedLevels = { level1: true };
     localStorage.setItem("completedLevels", JSON.stringify(completedLevels));
     setCompletedLevels(completedLevels);
-    // Automatically navigate to level 2
     navigate("/level2");
   };
-  useEffect(() => {
-    // Save the current level path to localStorage
-    localStorage.setItem("currentLevel", location.pathname);
 
-    // Retrieve current level from localStorage on reload
+  useEffect(() => {
+    localStorage.setItem("currentLevel", location.pathname);
     const savedLevel = localStorage.getItem("currentLevel");
     if (savedLevel && savedLevel !== location.pathname) {
-      navigate(savedLevel); // Navigate to the saved level if it's different
+      navigate(savedLevel);
     }
   }, [location, navigate]);
 
@@ -44,10 +54,7 @@ const Level1 = ({ setCompletedLevels }) => {
     { id: 4, text: "Apply suction at wound site" },
     { id: 5, text: "Apply turmeric/antiseptic ointment to local wound" },
     { id: 6, text: "Make an incision at the bite site" },
-    {
-      id: 7,
-      text: "Consult traditional healers, because they are locally accessible",
-    },
+    { id: 7, text: "Consult traditional healers, because they are locally accessible" },
     { id: 8, text: "Go to nearest Govt. hospital" },
     { id: 9, text: "Tell the doctor of any emergent sign" },
     { id: 10, text: "Try to capture the snake or take a picture of the snake" },
@@ -61,10 +68,9 @@ const Level1 = ({ setCompletedLevels }) => {
   ];
 
   useEffect(() => {
-    setDeck(initialDeck); // Set the first card as the initial card
+    setDeck(initialDeck);
   }, []);
 
-  // Shuffles and sets the deck on initial load and when game is reset
   useEffect(() => {
     const shuffledDeck = shuffle([...initialDeck]);
     setDeck(shuffledDeck);
@@ -81,46 +87,27 @@ const Level1 = ({ setCompletedLevels }) => {
     }
   }, [selectedCards1, selectedCards2, selectedCards3, selectedCards4]);
 
-  // Function to select a card from the deck
   const selectCard = (card, boxSetter) => {
     if (!card || !card.text) return;
-    boxSetter(card); // Set the selected card in the respective box
-
-    // Remove selected card from deck and show the next card
+    boxSetter(card);
     const newDeck = deck.filter((c) => c.id !== card.id);
     setDeck(newDeck);
     if (newDeck.length > 0) {
-      setDeckIndex(0); // Show the first card from the remaining deck
+      setDeckIndex(0);
     } else {
-      setDeckIndex(null); // No more cards left in the deck
+      setDeckIndex(null);
     }
   };
 
-  // Function to move to the next card in the deck
   const showNextCard = () => {
     if (deckIndex === null) {
-      setDeckIndex(0); // Show the first card on the first click
+      setDeckIndex(0);
     } else if (deckIndex < deck.length - 1) {
-      setDeckIndex(deckIndex + 1); // Show the next card
+      setDeckIndex(deckIndex + 1);
     } else {
-      setDeckIndex(0); // Reset to the first card when the deck ends
+      setDeckIndex(0);
     }
   };
-
-  // useEffect(() => {
-  //   if (countdown <= 0) {
-  //     resetGame(); // Reload the page when countdown reaches zero
-  //     return;
-  //   }
-
-  //   // Set the interval to decrease countdown every second (1000 ms)
-  //   const timer = setInterval(() => {
-  //     setCountdown((prev) => prev - 1);
-  //   }, 1000);
-
-  //   // Cleanup the interval on component unmount
-  //   return () => clearInterval(timer);
-  // }, [countdown]);
 
   const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -130,30 +117,13 @@ const Level1 = ({ setCompletedLevels }) => {
     return array;
   };
 
-  // let x = 0;
-  // const getRandomObject = () => {
-  //   const randomIndex = Math.floor(Math.random() * initialDeck.length);
-  //   return initialDeck[randomIndex];
-  // };
-
-  // const initialfun = () => {
-  //   setDeck(getRandomObject());
-  // };
-
   const getText1 = () => {
     if (deck.text === undefined) {
       alert("Please select the card from the deck");
     } else {
-      // console.log(deck);
       SetResult((prevResult) => [...prevResult, deck]);
       setSelectedCards1(deck);
-      setDeck(initialDeck[1]); // Move to the next card in the deck
-      // initialfun();
-      // Remove selected card from deck
-      // const remainingDeck = deck.filter((card) => card.id !== deck.id);
-      // setDeck(remainingDeck);
-
-      // handleBoxClick(deck, setSelectedCards2, setSelectedCards3, setSelectedCards4);
+      setDeck(initialDeck[1]);
     }
   };
 
@@ -163,13 +133,7 @@ const Level1 = ({ setCompletedLevels }) => {
     } else {
       setSelectedCards2(deck);
       SetResult((prevResult) => [...prevResult, deck]);
-      setDeck(initialDeck[2]); // Move to the next card in the deck
-      // initialfun();
-      // Remove selected card from deck
-      // const remainingDeck = deck.filter((card) => card.id !== deck.id);
-      // setDeck(remainingDeck);
-
-      // handleBoxClick(setSelectedCards1, deck, setSelectedCards3, setSelectedCards4);
+      setDeck(initialDeck[2]);
     }
   };
 
@@ -179,13 +143,7 @@ const Level1 = ({ setCompletedLevels }) => {
     } else {
       setSelectedCards3(deck);
       SetResult((prevResult) => [...prevResult, deck]);
-      setDeck(initialDeck[3]); // Move to the next card in the deck
-      // initialfun();
-      // Remove selected card from deck
-      // const remainingDeck = deck.filter((card) => card.id !== deck.id);
-      // setDeck(remainingDeck);
-
-      // handleBoxClick(setSelectedCards1, setSelectedCards2, deck, setSelectedCards4); // Remove the arguments here
+      setDeck(initialDeck[3]);
     }
   };
 
@@ -195,40 +153,28 @@ const Level1 = ({ setCompletedLevels }) => {
     } else {
       setSelectedCards4(deck);
       SetResult((prevResult) => [...prevResult, deck]);
-      setDeck({}); // No more cards left in the deck after 4 selections
-      // initialfun();
-      // Remove selected card from deck
-      // const remainingDeck = deck.filter((card) => card.id !== deck.id);
-      // setDeck(remainingDeck);
-
-      // handleBoxClick(setSelectedCards1, setSelectedCards2, setSelectedCards3 , deck); // Remove the arguments here
+      setDeck({});
     }
   };
 
   const res = () => {
-    // Create an array of selected cards
     const selectedCards = [
       selectedCards1.text,
       selectedCards2.text,
       selectedCards3.text,
       selectedCards4.text,
     ];
-
-    // Create an array of correct cards
     const correctCards = correctSequence.map((card) => card.text);
-
-    // Check if all selected cards exist in the correct sequence (regardless of order)
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
     );
-
     if (isCorrect) {
       console.log("correct");
       setShowSuccessPopup(true);
       localStorage.setItem("level1Result", JSON.stringify(selectedCards));
     } else {
       console.log("incorrect");
-      setShowWrongPopup(true); // Show wrong popup
+      setShowWrongPopup(true);
     }
   };
 
@@ -238,149 +184,182 @@ const Level1 = ({ setCompletedLevels }) => {
   };
 
   const resetGame = () => {
-    // setCountdown(3000);
-    // Reset the selected cards
     setSelectedCards1({});
     setSelectedCards2({});
     setSelectedCards3({});
     setSelectedCards4({});
-    setDeck(initialDeck); // Reset to the first card in the deck
-    // setDeckIndex(null); // Reset deck index
-
-    // // Reshuffle the deck
-    // const reshuffledDeck = shuffle(Array.from(initialDeck.entries()));
-    // setDeck(reshuffledDeck);
+    setDeck(initialDeck);
   };
 
-  // Function to handle click on a selected box
   const handleBoxClick = (card, boxSetter) => {
-    if (!card || !card.text) return; // Ignore empty clicks
-    // Add the card back to the deck
+    if (!card || !card.text) return;
     setDeck((prevDeck) => [...prevDeck, card]);
-    // Reset the respective selected card to empty
     boxSetter({});
+  };
+
+  const startGame = () => {
+    console.log("Game started");
+    setShowRules(false);
+    setGameStarted(true);
   };
 
   return (
     <div
-      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-      }}
+      className="relative w-full h-full overflow-auto"
+      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
     >
-      {/* Icons on the top-right corner */}
-      <div className="absolute top-4 right-4 flex items-center gap-4">
-        <div className="flex items-center gap-2 cursor-pointer">
-          <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
-        </div>
-        <div className="flex items-center gap-2 cursor-pointer">
-          <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-          <span className="text-slate-50 text-sm sm:text-base">Help</span>
-        </div>
-      </div>
-
-      <h2 className="text-2xl font-bold text-slate-50 mx-auto">
-        You have come across a patient of Snake bite. Now choose appropriate
-        actions
-      </h2>
-
-      {/* Deck Display */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-10 items-center w-full max-w-screen-md mx-auto">
-        {deck.map((card) => (
-          <div
-            key={card.id}
-            className="border w-full h-20 sm:h-24 md:h-32 border-blue-500 p-2 sm:p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
-            onClick={() =>
-              selectCard(
-                card,
-                !selectedCards1.text
-                  ? setSelectedCards1
-                  : !selectedCards2.text
-                  ? setSelectedCards2
-                  : !selectedCards3.text
-                  ? setSelectedCards3
-                  : setSelectedCards4
-              )
-            }
-          >
-            <p className="text-sm sm:text-md">{card.text}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Selected Boxes */}
-      <div className="text-xl w-full h-30">
-        <div>
-          <h2 className="text-center text-3xl font-bold text-slate-50">
-            Select Correct options
-          </h2>
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-8 mt-10">
-          {[selectedCards1, selectedCards2, selectedCards3, selectedCards4].map(
-            (card, idx) => (
-              <div
-                key={idx}
-                className="border-2 border-blue-400 w-40 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105 cursor-pointer"
-                onClick={() =>
-                  handleBoxClick(
-                    card,
-                    [
-                      setSelectedCards1,
-                      setSelectedCards2,
-                      setSelectedCards3,
-                      setSelectedCards4,
-                    ][idx]
-                  )
-                } // Use appropriate boxSetter
-              >
-                <p className="text-sm text-center">{card.text}</p>
-              </div>
-            )
-          )}
-        </div>
-      </div>
-
-      {/* Success Popup for Correct Sequence */}
-      {showSuccessPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm text-center">
-            <h2 className="text-lg sm:text-2xl font-bold text-green-600 mb-4">
-              Your choices are correct
-            </h2>
+      {showImage && (
+        <img
+          src={companyImage}
+          alt="Company Logo"
+          style={{
+            opacity: showImage ? 1 : 0,
+            transition: "opacity 1s",
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 1000,
+            width: "50%",
+          }}
+          onError={() => console.log("Image failed to load")}
+        />
+      )}
+      {showRules && !gameStarted && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-90 z-50 p-4">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-lg text-center border-4 border-gray-300">
+            <h2 className="text-3xl font-bold mb-4">Rules of the Snake Bite Game</h2>
+            <p className="mb-2 text-lg">
+              A patient of snake bite needs your urgent help.
+            </p>
+            <p className="mb-2 text-lg">
+              As the game progresses, you will come across different situations which you need to handle correctly by selecting appropriate ones from given options.
+            </p>
+            <p className="mb-2 text-lg">
+              There are possibilities like no envenomations, haemotoxic envenomation or neurotoxic envenomation.
+            </p>
+            <p className="mb-2 text-lg">
+              In case of them, these are different clinical scenarios leading to different management paths.
+            </p>
+            <p className="mb-4 text-lg">
+              By completing each path successfully, you will get a star.
+            </p>
+            <p className="mb-4 text-lg">Collect 8 stars to complete the game.</p>
             <button
-              className="bg-amber-950 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md"
-              onClick={handleSuccessClose}
+              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md"
+              onClick={startGame}
             >
-              Proceed to the next level
+              Start Playing
             </button>
           </div>
         </div>
       )}
-
-      {/* Wrong Popup for Incorrect Sequence */}
-      {showWrongPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm text-center">
-            <h2 className="text-lg sm:text-2xl font-bold text-red-400 mb-4">
-              Your choices are incorrect
-            </h2>
-            {/* <p className="mb-4 sm:mb-6">You have selected the wrong option.</p> */}
-            <button
-              className="bg-red-400 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md"
-              onClick={() => {
-                setShowWrongPopup(false);
-                resetGame();
-              }}
-            >
-              Try Again
-            </button>
+      {gameStarted && (
+        <div className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto">
+          <div className="absolute top-4 right-4 flex items-center gap-4">
+            <div className="flex items-center gap-2 cursor-pointer">
+              <FaClock className="text-slate-50 text-xl sm:text-2xl" />
+            </div>
+            <div className="flex items-center gap-2 cursor-pointer">
+              <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
+              <span className="text-slate-50 text-sm sm:text-base">Help</span>
+            </div>
           </div>
+
+          <h2 className="text-2xl font-bold text-slate-50 mx-auto">
+            You have come across a patient of Snake bite. Now choose appropriate
+            actions
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-10 items-center w-full max-w-screen-md mx-auto">
+            {deck.map((card) => (
+              <div
+                key={card.id}
+                className="border w-full h-20 sm:h-24 md:h-32 border-blue-500 p-2 sm:p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
+                onClick={() =>
+                  selectCard(
+                    card,
+                    !selectedCards1.text
+                      ? setSelectedCards1
+                      : !selectedCards2.text
+                      ? setSelectedCards2
+                      : !selectedCards3.text
+                      ? setSelectedCards3
+                      : setSelectedCards4
+                  )
+                }
+              >
+                <p className="text-sm sm:text-md">{card.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-xl w-full h-30">
+            <div>
+              <h2 className="text-center text-3xl font-bold text-slate-50">
+                Select Correct options
+              </h2>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-8 mt-10">
+              {[selectedCards1, selectedCards2, selectedCards3, selectedCards4].map(
+                (card, idx) => (
+                  <div
+                    key={idx}
+                    className="border-2 border-blue-400 w-40 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105 cursor-pointer"
+                    onClick={() =>
+                      handleBoxClick(
+                        card,
+                        [
+                          setSelectedCards1,
+                          setSelectedCards2,
+                          setSelectedCards3,
+                          setSelectedCards4,
+                        ][idx]
+                      )
+                    }
+                  >
+                    <p className="text-sm text-center">{card.text}</p>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          {showSuccessPopup && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm text-center">
+                <h2 className="text-lg sm:text-2xl font-bold text-green-600 mb-4">
+                  Your choices are correct
+                </h2>
+                <button
+                  className="bg-amber-950 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md"
+                  onClick={handleSuccessClose}
+                >
+                  Proceed to the next level
+                </button>
+              </div>
+            </div>
+          )}
+
+          {showWrongPopup && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm text-center">
+                <h2 className="text-lg sm:text-2xl font-bold text-red-400 mb-4">
+                  Your choices are incorrect
+                </h2>
+                <button
+                  className="bg-red-400 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md"
+                  onClick={() => {
+                    setShowWrongPopup(false);
+                    resetGame();
+                  }}
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -388,3 +367,9 @@ const Level1 = ({ setCompletedLevels }) => {
 };
 
 export default Level1;
+
+
+/* The changes made to the `Level1.jsx` code include adding a company logo image that displays for 30 seconds and fades out, followed by a set of game rules with a "Start Playing" button to initiate the level. 
+A new state (`showImage`, `showRules`, `gameStarted`) was introduced along with a `useEffect` hook to manage the 30-second timer for the image transition to rules. 
+The rules section was styled to match the provided design, and the font sizes were adjusted with the header set to a larger, bold `text-3xl` and the body text to a slightly smaller `text-lg`.
+Debug console logs were added to troubleshoot image loading and state transitions, and the game content is only rendered after the "Start Playing" button is clicked, ensuring the original level logic remains intact within the new flow. */

@@ -75,28 +75,29 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/level4"
-          element={
-            <ProtectedRoute
-              completed={completedLevels.level3}
-              redirectTo="/level3"
-            >
-              <Level4 setCompletedLevels={setCompletedLevels} />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/level5"
-          element={
-            <ProtectedRoute
-              completed={completedLevels.level3}
-              redirectTo="/level3"
-            >
-              <Level5 setCompletedLevels={setCompletedLevels} />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/level4"
+  element={
+    <ProtectedRoute
+      completed={completedLevels.level3}
+      redirectTo="/level3"
+    >
+      <Level4 setCompletedLevels={setCompletedLevels} />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/level5"
+  element={
+    <ProtectedRoute
+      completed={completedLevels.level2} // ✅ Only requires Level 2
+      redirectTo="/level2"
+    >
+      <Level5 setCompletedLevels={setCompletedLevels} />
+    </ProtectedRoute>
+  }
+/>
+
         <Route
           path="/level6"
           element={
@@ -290,3 +291,18 @@ function App() {
 }
 
 export default App;
+
+
+ /* <Route
+  path="/level5"
+  element={
+    <ProtectedRoute
+      completed={completedLevels.level3}
+      redirectTo="/level3"
+    >
+      <Level5 setCompletedLevels={setCompletedLevels} />
+    </ProtectedRoute>
+  }
+/>
+ 
+LEVEL 5 was PROTECTED!*/ 

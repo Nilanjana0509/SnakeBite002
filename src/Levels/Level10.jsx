@@ -1,5 +1,3 @@
-// PNNI(10)
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
@@ -66,8 +64,8 @@ const Level10 = ({ setCompletedLevels }) => {
 
   // Correct sequence of cards
   const correctSequence = [
-    // { id: 1, text: "AN maintenance dose" },
     { id: 2, text: "Wait for another 30 min for improvement" },
+    { id: 1, text: "AN maintenance dose" },
   ];
 
   // Shuffle the deck when the component mounts
@@ -98,15 +96,12 @@ const Level10 = ({ setCompletedLevels }) => {
 
   useEffect(() => {
     if (
-      selectedCards1.text !== undefined 
-      // &&
-      // selectedCards2.text !== undefined
+      selectedCards1.text !== undefined &&
+      selectedCards2.text !== undefined
     ) {
       res();
     }
-  }, [selectedCards1, 
-    // selectedCards2
-  ]);
+  }, [selectedCards1, selectedCards2]);
 
   // useEffect(() => {
   //   if (countdown <= 0) {
@@ -163,31 +158,16 @@ const Level10 = ({ setCompletedLevels }) => {
   //   }
   // };
 
-  // const res = () => {
-  //   // console.log('sdsds');
-  //   console.log(selectedCards1);
-  //   console.log(selectedCards2);
-
-  //   if (
-  //     selectedCards1.id === correctSequence[0].id &&
-  //     selectedCards2.id === correctSequence[1].id
-  //   ) {
-  //     // console.log('correct');
-  //     setShowSuccessPopup(true);
-  //   } else {
-  //     // console.log("incorrect");
-  //     setShowWrongPopup(true); // Show wrong popup
-  //   }
-
-  //   // if(result.length>=3){
-  //   //   console.log(result);
-
-  //   // }
-  // };
-   // Function to select a card from the deck
-   const selectCard = (card, boxSetter) => {
+  // Function to select a card from the deck
+  const selectCard = (card, boxSetter) => {
     if (!card || !card.text) return;
-    boxSetter(card); // Set the selected card in the respective box
+    if (!selectedCards1.text) {
+      boxSetter(card); // Set the selected card in the respective box
+    } else if (!selectedCards2.text) {
+      boxSetter(card); // Set the selected card in the respective box
+    } else {
+      console.log("Both selections are filled.");
+    }
 
     // Remove selected card from deck and show the next card
     const newDeck = deck.filter((c) => c.id !== card.id);
@@ -212,9 +192,7 @@ const Level10 = ({ setCompletedLevels }) => {
 
   const res = () => {
     // Create an array of selected cards
-    const selectedCards = [selectedCards1.text, 
-      // selectedCards2.text
-    ];
+    const selectedCards = [selectedCards1.text, selectedCards2.text];
 
     // Create an array of correct cards
     const correctCards = correctSequence.map((card) => card.text);
@@ -222,7 +200,7 @@ const Level10 = ({ setCompletedLevels }) => {
     // Check if all selected cards exist in the correct sequence (regardless of order)
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
-    );
+    ) && selectedCards.length === correctCards.length;
 
     if (isCorrect) {
       console.log("correct");
@@ -265,7 +243,7 @@ const Level10 = ({ setCompletedLevels }) => {
     // setCountdown(1000);
     // Reset the selected cards
     setSelectedCards1({});
-    // setSelectedCards2({});
+    setSelectedCards2({});
     setDeck(initialDeck); // Reset to the first card in the deck
     setDeckIndex(0); // Reset the index to start from the first card
 
@@ -316,11 +294,9 @@ const Level10 = ({ setCompletedLevels }) => {
             onClick={() => {
               if (!selectedCards1.text) {
                 selectCard(card, setSelectedCards1);
-              }
-              //  else if (!selectedCards2.text) {
-              //   selectCard(card, setSelectedCards2);
-              // } 
-              else {
+              } else if (!selectedCards2.text) {
+                selectCard(card, setSelectedCards2);
+              } else {
                 console.log("Both selections are filled.");
               }
             }}
@@ -339,9 +315,7 @@ const Level10 = ({ setCompletedLevels }) => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 mt-4">
-          {[selectedCards1, 
-          // selectedCards2
-        ].map((card, idx) => (
+          {[selectedCards1, selectedCards2].map((card, idx) => (
             <div
               key={idx}
               className="border-2 border-blue-400 w-60 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
@@ -404,3 +378,10 @@ const Level10 = ({ setCompletedLevels }) => {
 };
 
 export default Level10;
+
+/* The changes made to the `Level10.jsx` code include enabling a second selection box by utilizing the `selectedCards2` state and updating
+the `useEffect` to trigger the `res()` function when both cards are selected. The `correctSequence` array was modified to include "AN maintenance dose" 
+as the second correct answer alongside "Wait for another 30 min for improvement." The `selectCard` function was adjusted to allow selection 
+of a second card, while the `res` function was updated to check both `selectedCards1.text` and `selectedCards2.text` against the correct sequence, ensuring the length matches.
+The `resetGame` function now resets both selection boxes, and the JSX was updated to display the second box by uncommenting the `selectedCards2` mapping. 
+These modifications maintain the existing code structure while adding the requested functionality. */
