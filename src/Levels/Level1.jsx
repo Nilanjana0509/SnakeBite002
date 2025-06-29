@@ -15,7 +15,6 @@ const Level1 = ({ setCompletedLevels }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [result, SetResult] = useState([]);
-  const [sc, setsc] = useState(0);
   const [showImage, setShowImage] = useState(true);
   const [showRules, setShowRules] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
@@ -76,10 +75,10 @@ const Level1 = ({ setCompletedLevels }) => {
 
   useEffect(() => {
     if (
-      selectedCards1.text !== undefined &&
-      selectedCards2.text !== undefined &&
-      selectedCards3.text !== undefined &&
-      selectedCards4.text !== undefined
+      selectedCards1.text &&
+      selectedCards2.text &&
+      selectedCards3.text &&
+      selectedCards4.text
     ) {
       res();
     }
@@ -90,11 +89,7 @@ const Level1 = ({ setCompletedLevels }) => {
     boxSetter(card);
     const newDeck = deck.filter((c) => c.id !== card.id);
     setDeck(newDeck);
-    if (newDeck.length > 0) {
-      setDeckIndex(0);
-    } else {
-      setDeckIndex(null);
-    }
+    setDeckIndex(newDeck.length > 0 ? 0 : null);
   };
 
   const showNextCard = () => {
@@ -116,60 +111,58 @@ const Level1 = ({ setCompletedLevels }) => {
   };
 
   const getText1 = () => {
-    if (deck.text === undefined) {
+    if (!deck.text) {
       alert("Please select the card from the deck");
     } else {
-      SetResult((prevResult) => [...prevResult, deck]);
+      SetResult((prev) => [...prev, deck]);
       setSelectedCards1(deck);
       setDeck(initialDeck[1]);
     }
   };
 
   const getText2 = () => {
-    if (deck.text === undefined) {
+    if (!deck.text) {
       alert("Please select the card from the deck");
     } else {
       setSelectedCards2(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
+      SetResult((prev) => [...prev, deck]);
       setDeck(initialDeck[2]);
     }
   };
 
   const getText3 = () => {
-    if (deck.text === undefined) {
+    if (!deck.text) {
       alert("Please select the card from the deck");
     } else {
       setSelectedCards3(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
+      SetResult((prev) => [...prev, deck]);
       setDeck(initialDeck[3]);
     }
   };
 
   const getText4 = () => {
-    if (deck.text === undefined) {
+    if (!deck.text) {
       alert("Please select the card from the deck");
     } else {
       setSelectedCards4(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
+      SetResult((prev) => [...prev, deck]);
       setDeck({});
     }
   };
 
   const res = () => {
-    const selectedCards = [
+    const selected = [
       selectedCards1.text,
       selectedCards2.text,
       selectedCards3.text,
       selectedCards4.text,
     ];
-    const correctCards = correctSequence.map((card) => card.text);
-    const isCorrect = selectedCards.every((selectedCard) =>
-      correctCards.includes(selectedCard)
-    );
+    const correct = correctSequence.map((card) => card.text);
+    const isCorrect = selected.every((text) => correct.includes(text));
     if (isCorrect) {
       console.log("correct");
       setShowSuccessPopup(true);
-      localStorage.setItem("level1Result", JSON.stringify(selectedCards));
+      localStorage.setItem("level1Result", JSON.stringify(selected));
     } else {
       console.log("incorrect");
       setShowWrongPopup(true);
@@ -191,7 +184,7 @@ const Level1 = ({ setCompletedLevels }) => {
 
   const handleBoxClick = (card, boxSetter) => {
     if (!card || !card.text) return;
-    setDeck((prevDeck) => [...prevDeck, card]);
+    setDeck((prev) => [...prev, card]);
     boxSetter({});
   };
 
@@ -204,14 +197,17 @@ const Level1 = ({ setCompletedLevels }) => {
   return (
     <div
       className="relative w-full h-full overflow-auto"
-      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+      }}
     >
       {showImage && (
         <img
           src="/whatsapp.jpeg"
           alt="Company Logo"
           style={{
-            opacity: showImage ? 1 : 0,
+            opacity: 1,
             transition: "opacity 1s",
             position: "fixed",
             top: "50%",
@@ -223,4 +219,10 @@ const Level1 = ({ setCompletedLevels }) => {
           onError={() => console.log("Image failed to load")}
         />
       )}
-      {/* The rest of your UI remains unchanged */}
+
+      {/* Add your actual game UI below here */}
+    </div>
+  );
+};
+
+export default Level1;
