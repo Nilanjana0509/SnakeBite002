@@ -21,14 +21,14 @@ const Level1 = ({ setCompletedLevels }) => {
   const [showRules, setShowRules] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  // Handle image display for 30 seconds and transition to rules
+  // Handle image display for 10 seconds and transition to rules
   useEffect(() => {
     console.log("Image display started");
     const timer = setTimeout(() => {
-      console.log("Image fading out after 15 seconds");
+      console.log("Image fading out after 10 seconds");
       setShowImage(false);
       setShowRules(true);
-    }, 15000);
+    }, 10000);
     return () => clearTimeout(timer);
   }, []);
 
