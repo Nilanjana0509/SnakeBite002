@@ -227,7 +227,7 @@ const Level1 = ({ setCompletedLevels }) => {
       )}
       {showRules && !gameStarted && (
         <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-90 z-50 p-4">
-          <div className="bg-gray-100 p-6 rounded-lg shadow-lg text-center border-4 border-gray-300">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-lg text-center border-4 border-gray-300 overflow-y-auto max-h-[70vh]">
             <h2 className="text-3xl font-bold mb-4">Rules of the Snake Bite Game</h2>
             <p className="mb-2 text-lg">
               A patient of snake bite needs your urgent help.
