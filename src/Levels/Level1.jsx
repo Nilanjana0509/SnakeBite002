@@ -25,10 +25,10 @@ const Level1 = ({ setCompletedLevels }) => {
   useEffect(() => {
     console.log("Image display started");
     const timer = setTimeout(() => {
-      console.log("Image fading out after 10 seconds");
+      console.log("Image fading out after 06 seconds");
       setShowImage(false);
       setShowRules(true);
-    }, 10000);
+    }, 6000);
     return () => clearTimeout(timer);
   }, []);
 
