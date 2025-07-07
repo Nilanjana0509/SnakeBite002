@@ -1,4 +1,4 @@
-//  14 -> PNNIb (16) -> Submit
+// 14 -> PNNIb (16) -> Submit
 
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
@@ -242,7 +242,7 @@ const Level16 = ({ setCompletedLevels }) => {
     if (isCorrect) {
       console.log("correct");
       setShowSuccessPopup(true);
-      localStorage.setItem("level5Result", JSON.stringify(selectedCards));
+      localStorage.setItem("level16Result", JSON.stringify(selectedCards));
     } else {
       console.log("incorrect");
       setShowWrongPopup(true); // Show wrong popup
@@ -305,7 +305,7 @@ const Level16 = ({ setCompletedLevels }) => {
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
+            className="border w-36 h-24 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
             onClick={() => {
               if (!selectedCards1.text) {
                 selectCard(card, setSelectedCards1);
@@ -333,7 +333,7 @@ const Level16 = ({ setCompletedLevels }) => {
           {[selectedCards1, selectedCards2].map((card, idx) => (
             <div
               key={idx}
-              className="border-2 border-blue-400 w-60 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
+              className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
             >
               <p className="text-md text-center">{card.text}</p>
             </div>
