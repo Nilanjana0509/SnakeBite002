@@ -280,7 +280,7 @@ const Level7 = ({ setCompletedLevels }) => {
           {deck.map((card) => (
             <div
               key={card.id}
-              className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
+              className="border w-36 h-24 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
               onClick={() => selectCard(card, setSelectedCards)}
             >
               <p>{card.text}</p>
@@ -295,14 +295,14 @@ const Level7 = ({ setCompletedLevels }) => {
             Select the Correct Option
           </h2>
         </div>
-      <div className="mt-8 w-60 h-32 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
+      <div className="mt-8 w-48 h-24 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
         {/* <div className="flex w-full mt-10">
           <h2 className="text-xl text-blue-600 font-bold">
             Time Remaining: {countdown} seconds
           </h2>
-        </div> */}text-slate-50
+        </div> */}
 
         {/* Success Popup for Correct Sequence */}
         {showSuccessPopup && (
