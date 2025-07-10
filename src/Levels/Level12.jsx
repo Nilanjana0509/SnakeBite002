@@ -1,5 +1,3 @@
-// PSNC(12) -> Submit
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
@@ -45,7 +43,6 @@ const Level12 = ({ setCompletedLevels }) => {
 
     // Retrieve the origin level
     const origin = localStorage.getItem("origin");
-
 
     // Navigate to level 1
     navigate("/result12", { state: { origin } });
