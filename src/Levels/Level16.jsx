@@ -1,5 +1,3 @@
-// 14 -> PNNIb (16) -> Submit
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
@@ -63,10 +61,10 @@ const Level16 = ({ setCompletedLevels }) => {
   const initialDeck = [
     { id: 1, text: "AN loading dose" },
     { id: 2, text: "Artificial ventilation SOS" },
-    { id: 3, text: "Transfer to referal hospital" },
+    { id: 3, text: "Transfer to referral hospital" },
     { id: 4, text: "10 vials AVS" },
-    { id: 5, text: "Inj. Hydrocortis one" },
-    { id: 6, text: "AN maintainance dose" },
+    { id: 5, text: "Inj. Hydrocortisone" },
+    { id: 6, text: "AN maintenance dose" },
     { id: 7, text: "Wait for 30 mins" },
     { id: 8, text: "Wait for 1 hour" },
   ];
@@ -74,7 +72,7 @@ const Level16 = ({ setCompletedLevels }) => {
   // Correct sequence of cards
   const correctSequence = [
     { id: 2, text: "Artificial ventilation SOS" },
-    { id: 3, text: "Transfer to referal hospital" },
+    { id: 3, text: "Transfer to referral hospital" },
   ];
 
   // Shuffle the deck when the component mounts
