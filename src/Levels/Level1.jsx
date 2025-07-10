@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 import companyImage from "/whatsapp.jpg";
 
@@ -21,14 +21,14 @@ const Level1 = ({ setCompletedLevels }) => {
   const [showRules, setShowRules] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  // Handle image display for 06 seconds and transition to rules
+  // Handle image display for 04 seconds and transition to rules
   useEffect(() => {
     console.log("Image display started");
     const timer = setTimeout(() => {
-      console.log("Image fading out after 06 seconds");
+      console.log("Image fading out after 04 seconds");
       setShowImage(false);
       setShowRules(true);
-    }, 6000);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -258,11 +258,7 @@ const Level1 = ({ setCompletedLevels }) => {
         <div className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto">
           <div className="absolute top-4 right-4 flex items-center gap-4">
             <div className="flex items-center gap-2 cursor-pointer">
-              <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-            </div>
-            <div className="flex items-center gap-2 cursor-pointer">
               <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-              <span className="text-slate-50 text-sm sm:text-base">Help</span>
             </div>
           </div>
 
