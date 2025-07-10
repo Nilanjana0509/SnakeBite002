@@ -1,5 +1,3 @@
-// PSC(12)
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
@@ -42,7 +40,7 @@ const Level11 = ({ setCompletedLevels }) => {
     array.push(selectedCards3.text);
 
     console.log(array);
-    localStorage.setItem( "origin", "level11", "level11Result", JSON.stringify(array));
+    localStorage.setItem("origin", "level11", "level11Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
 
     // Navigate to level 11
@@ -68,7 +66,7 @@ const Level11 = ({ setCompletedLevels }) => {
   const initialDeck = [
     { id: 1, text: "20 WBCT" },
     { id: 2, text: "Every hour" },
-    { id: 3, text: "TIll next 4 hours" },
+    { id: 3, text: "Till next 4 hours" },
     { id: 4, text: "10 WBCT" },
     { id: 5, text: "INR" },
     { id: 6, text: "Every 4 hours" },
@@ -79,7 +77,7 @@ const Level11 = ({ setCompletedLevels }) => {
   const correctSequence = [
     { id: 1, text: "20 WBCT" },
     { id: 2, text: "Every hour" },
-    { id: 3, text: "TIll next 4 hours" },
+    { id: 3, text: "Till next 4 hours" },
   ];
 
   // Shuffle the deck when the component mounts
