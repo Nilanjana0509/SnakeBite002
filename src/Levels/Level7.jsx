@@ -1,5 +1,3 @@
-// PN(7)
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; 
 import backgroundImage from "../assets/images/snake11.png";
