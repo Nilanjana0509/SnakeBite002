@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import backgroundImage from "../assets/images/snake11.png";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle } from "react-icons/fa";
 
 const Level3 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
@@ -162,9 +162,9 @@ const Level3 = ({ setCompletedLevels }) => {
       style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
     >
       <div className="absolute top-4 right-4 flex items-center gap-4">
-        <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-        <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-        <span className="text-slate-50 text-sm sm:text-base">Help</span>
+        <div className="flex items-center gap-2 cursor-pointer">
+          <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
+        </div>
       </div>
 
       <p className="text-2xl font-bold text-slate-50 mx-auto text-center mt-4">
