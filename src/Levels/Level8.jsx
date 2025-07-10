@@ -1,5 +1,3 @@
-// PS(8)
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
@@ -35,7 +33,7 @@ const Level8 = ({ setCompletedLevels }) => {
     array.push(selectedCards.text);
 
     console.log(array);
-    localStorage.setItem("origin", "level8", "level8Result", JSON.stringify(array));
+    localStorage.setItem("level8Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
 
     // Navigate to level 11
@@ -309,7 +307,7 @@ const showNextCard = () => {
       <div className="mt-8 w-60 h-32 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
-        {/* <div classNtext-slate-50ame="flex w-full mt-10">
+        {/* <div className="flex w-full mt-10">
           <h2 className="text-xl text-blue-600 font-bold">
             Time Remaining: {countdown} seconds
           </h2>
