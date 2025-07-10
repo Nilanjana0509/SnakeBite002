@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../assets/images/snake11.png";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle } from "react-icons/fa";
 
 const Level2 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
@@ -145,11 +145,7 @@ const Level2 = ({ setCompletedLevels }) => {
     >
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
-          <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-        </div>
-        <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-          <span className="text-slate-50 text-sm sm:text-base">Help</span>
         </div>
       </div>
       <h2 className="text-2xl font-bold text-slate-50 mx-auto">
@@ -187,13 +183,7 @@ const Level2 = ({ setCompletedLevels }) => {
         </h2>
       </div>
       <div className="flex flex-wrap justify-center gap-8 mt-4">
-        {[
-          selectedCards1,
-          selectedCards2,
-          selectedCards3,
-          selectedCards4,
-          selectedCards5,
-        ].map((card, idx) => (
+        {[selectedCards1, selectedCards2, selectedCards3, selectedCards4, selectedCards5].map((card, idx) => (
           <div
             key={idx}
             className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700"
