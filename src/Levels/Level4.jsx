@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level4 = ({ setCompletedLevels }) => {
@@ -308,15 +308,7 @@ const Level4 = ({ setCompletedLevels }) => {
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
-          <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
-        </div>
-        <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-          <span className="text-slate-50 text-sm sm:text-base">Help</span>
         </div>
       </div>
       <div className="flex items-center justify-between w-full">
