@@ -314,74 +314,13 @@ const Level10 = ({ setCompletedLevels }) => {
           </h2>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-8 mt-4">
-          {[selectedCards1, selectedCards2].map((card, idx) => (
-            <div
-              key={idx}
-              className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
-            >
-              <p className="text-md text-center">{card.text}</p>
+                <div className="flex flex-wrap justify-center gap-8 mt-4">
+                  {/* Add any content for this div here if needed */}
+                </div>
+              </div>
+              {/* Add any additional closing tags for parent divs if needed */}
             </div>
-          ))}
-        </div>
-      </div>
-        {/* <div className="flex w-full mt-10">
-          <h2 className="text-xl text-blue-600 font-bold">Time Remaining: {countdown} seconds</h2>
-        </div> */}
-
-        {/* Success Popup for Correct Sequence */}
-        {showSuccessPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-              <h2 className="text-2xl font-bold text-green-600 mb-4">
-                You have made correct choice
-              </h2>
-              <p>Choose an option from below</p>
-              <button
-                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md "
-                onClick={() => handleSuccessClose("/level13")} // Use the new function
-              >
-                Situation 1: Improvement seen after 1 hour
-              </button>
-              <button
-                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md "
-                onClick={() => handleSuccessClose("/level14")} // Use the new function
-              >
-                Situation 2: No improvement after 1 hour
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Wrong Popup for Incorrect Sequence */}
-        {showWrongPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-              <h2 className="text-2xl font-bold text-red-400 mb-4">
-                Your choices are incorrect
-              </h2>
-              {/* <p className="mb-6">You have selected the wrong sequence.</p> */}
-              <button
-                className="bg-red-400 text-white px-4 py-2 rounded-md"
-                onClick={() => {
-                  setShowWrongPopup(false);
-                  resetGame();
-                }}
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-  );
-};
-
-export default Level10;
-
-/* The changes made to the `Level10.jsx` code include enabling a second selection box by utilizing the `selectedCards2` state and updating
-the `useEffect` to trigger the `res()` function when both cards are selected. The `correctSequence` array was modified to include "AN maintenance dose" 
-as the second correct answer alongside "Wait for another 30 min for improvement." The `selectCard` function was adjusted to allow selection 
-of a second card, while the `res` function was updated to check both `selectedCards1.text` and `selectedCards2.text` against the correct sequence, ensuring the length matches.
-The `resetGame` function now resets both selection boxes, and the JSX was updated to display the second box by uncommenting the `selectedCards2` mapping. 
-These modifications maintain the existing code structure while adding the requested functionality. */
+          );
+        };
+        
+        export default Level10;
