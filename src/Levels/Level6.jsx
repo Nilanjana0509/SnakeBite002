@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level6 = ({ setCompletedLevels }) => {
@@ -16,6 +16,7 @@ const Level6 = ({ setCompletedLevels }) => {
   const [result, SetResult] = useState([]);
   // const [countdown, setCountdown] = useState(1000);
   const [level3Selection, setLevel3Selection] = useState(null);
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel6 = () => {
     // Mark level 6 as completed
@@ -57,6 +58,9 @@ const Level6 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
 
   const initialDeck = [
@@ -78,12 +82,6 @@ const Level6 = ({ setCompletedLevels }) => {
     { id: 3, text: "IM" },
   ];
 
-  // Shuffle the deck when the component mounts
-  // useEffect(() => {
-  //   const shuffledDeck = shuffle(Array.from(initialDeck.entries()));
-  //   setDeck(shuffledDeck);
-  // }, []);
-
   // Function to shuffle the deck
   const shuffle = (array) => {
     const shuffledArray = [...array];
@@ -102,10 +100,6 @@ const Level6 = ({ setCompletedLevels }) => {
     setDeck(shuffle(initialDeck));
   }, []);
 
-  // useEffect(() => {
-  //   setDeck(initialDeck); // Set the first card as the initial card
-  // }, []);
-
   useEffect(() => {
     if (
       selectedCards1.text !== undefined &&
@@ -123,71 +117,6 @@ const Level6 = ({ setCompletedLevels }) => {
       setLevel3Selection(level3Result);
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (countdown <= 0) {
-  //     resetGame(); // Reload the page when countdown reaches zero
-  //     return;
-  //   }
-
-  //   // Set the interval to decrease countdown every second (1000 ms)
-  //   const timer = setInterval(() => {
-  //     setCountdown((prev) => prev - 1);
-  //   }, 1000);
-
-  //   // Cleanup the interval on component unmount
-  //   return () => clearInterval(timer);
-  // }, [countdown]);
-
-  // Shuffle function
-  // const shuffle = (array) => {
-  //   for (let i = array.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [array[i], array[j]] = [array[j], array[i]];
-  //   }
-  //   return array;
-  // };
-
-  // function getRandomObject() {
-  //   const randomIndex = Math.floor(Math.random() * initialDeck.length);
-  //   return initialDeck[randomIndex];
-  // }
-
-  // const initialfun = () => {
-  //   setDeck(getRandomObject());
-  // };
-
-  // const getText1 = () => {
-  //   if (deck.text === undefined) {
-  //     alert("Please select the card from the deck");
-  //   } else {
-  //     setSelectedCards1(deck);
-  //     SetResult((prevResult) => [...prevResult, deck]);
-  //     initialfun();
-  //     // handleBoxClick(deck, setSelectedCards2, setSelectedCards3);
-  //   }
-  // };
-
-  // const getText2 = () => {
-  //   if (deck.text === undefined) {
-  //     alert("Please select the card from the deck");
-  //   } else {
-  //     setSelectedCards2(deck);
-  //     SetResult((prevResult) => [...prevResult, deck]);
-  //     initialfun();
-  //     // handleBoxClick(setSelectedCards1, deck, setSelectedCards3);
-  //   }
-  // };
-  // const getText3 = () => {
-  //   if (deck.text === undefined) {
-  //     alert("Please select the card from the deck");
-  //   } else {
-  //     setSelectedCards3(deck);
-  //     SetResult((prevResult) => [...prevResult, deck]);
-  //     initialfun();
-  //     // handleBoxClick(setSelectedCards1, setSelectedCards2, deck);
-  //   }
-  // };
 
   // Function to select a card from the deck
   const selectCard = (card) => {
@@ -225,30 +154,6 @@ const Level6 = ({ setCompletedLevels }) => {
       setDeckIndex(0); // Reset to the first card when the deck ends
     }
   };
-
-  // const res = () => {
-  //   // console.log('sdsds');
-  //   console.log(selectedCards1);
-  //   console.log(selectedCards2);
-  //   console.log(selectedCards3);
-
-  //   if (
-  //     selectedCards1.id === correctSequence[0].id &&
-  //     selectedCards2.id === correctSequence[1].id &&
-  //     selectedCards3.id === correctSequence[2].id
-  //   ) {
-  //     // console.log('correct');
-  //     setShowSuccessPopup(true);
-  //   } else {
-  //     // console.log("incorrect");
-  //     setShowWrongPopup(true); // Show wrong popup
-  //   }
-
-  //   // if(result.length>=3){
-  //   //   console.log(result);
-
-  //   // }
-  // };
 
   const res = () => {
     // Create an array of selected cards
@@ -301,10 +206,6 @@ const Level6 = ({ setCompletedLevels }) => {
     setSelectedCards2({});
     setSelectedCards3({});
     setDeck(initialDeck); // Reset to the first card in the deck
-
-    // Reshuffle the deck
-    // const reshuffledDeck = shuffle(Array.from(initialDeck.entries()));
-    // setDeck(reshuffledDeck);
   };
 
   const codeSelection = () => {
@@ -326,14 +227,17 @@ const Level6 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
@@ -341,9 +245,7 @@ const Level6 = ({ setCompletedLevels }) => {
         </div>
       </div>
       <div className="flex items-center justify-between w-full">
-        {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
         <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 text-center">
-          {/* AVS reaction: */}
           5 mins after starting AVS, patient develops Anaphylactoid reactions.<br />{" "}
           Options available for management:
         </h2>
@@ -361,7 +263,6 @@ const Level6 = ({ setCompletedLevels }) => {
     </div>
   ))}
 </div>
-
 
       {/* Selected Boxes */}
       <div className="text-xl w-full h-30">
@@ -382,12 +283,6 @@ const Level6 = ({ setCompletedLevels }) => {
           ))}
         </div>
       </div>
-
-      {/* <div className="flex w-full mt-10">
-          <h2 className="text-xl text-blue-600 font-bold">
-            Time Remaining: {countdown} seconds
-          </h2>
-        </div> */}
 
       {/* Success Popup for Correct Sequence */}
       {showSuccessPopup && (
@@ -436,7 +331,6 @@ const Level6 = ({ setCompletedLevels }) => {
             <h2 className="text-2xl font-bold text-red-400 mb-4">
               Your choices are incorrect
             </h2>
-            {/* <p className="mb-6">You have selected the wrong sequence.</p> */}
             <button
               className="bg-red-400 text-white px-4 py-2 rounded-md"
               onClick={() => {
