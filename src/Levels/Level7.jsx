@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; 
 import backgroundImage from "../assets/images/snake11.png";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -15,6 +15,7 @@ const Level7 = ({ setCompletedLevels }) => {
   const [result, SetResult] = useState([]);
   // const [countdown, setCountdown] = useState(1000);
   const [level3Selection, setLevel3Selection] = useState(null);
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel7 = () => {
     // Mark level 7 as completed
@@ -48,6 +49,9 @@ const Level7 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
   
   const initialDeck = [
@@ -62,16 +66,6 @@ const Level7 = ({ setCompletedLevels }) => {
   const correctSequence = [
     { id: 1, text: "Loading Atropine IV Neostigmine IM or IV" },
   ];
-
-  // Shuffle the deck when the component mounts
-  // useEffect(() => {
-  //   const shuffledDeck = shuffle(Array.from(initialDeck.entries()));
-  //   setDeck(shuffledDeck);
-  // }, []);
-
-  // useEffect(() => {
-  //   setDeck(initialDeck); // Set the first card as the initial card
-  // }, []);
 
   // Function to shuffle an array
   const shuffle = (array) => {
@@ -129,50 +123,6 @@ const Level7 = ({ setCompletedLevels }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (countdown <= 0) {
-  //     resetGame(); // Reload the page when countdown reaches zero
-  //     return;
-  //   }
-
-  //   // Set the interval to decrease countdown every second (1000 ms)
-  //   const timer = setInterval(() => {
-  //     setCountdown((prev) => prev - 1);
-  //   }, 1000);
-
-  //   // Cleanup the interval on component unmount
-  //   return () => clearInterval(timer);
-  // }, [countdown]);
-
-  // Shuffle function
-  // const shuffle = (array) => {
-  //   for (let i = array.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [array[i], array[j]] = [array[j], array[i]];
-  //   }
-  //   return array;
-  // };
-
-  // function getRandomObject() {
-  //   const randomIndex = Math.floor(Math.random() * initialDeck.length);
-  //   return initialDeck[randomIndex];
-  // }
-
-  // const initialfun = () => {
-  //   setDeck(getRandomObject());
-  // };
-
-  // const getText = () => {
-  //   if (deck.text === undefined) {
-  //     alert("Please select the card from the deck");
-  //   } else {
-  //     setSelectedCards(deck);
-  //     SetResult((prevResult) => [...prevResult, deck]);
-  //     initialfun();
-  //     // handleBoxClick(setSelectedCards);
-  //   }
-  // };
-
   const res = () => {
     // Create an array of selected cards
     const selectCard = [selectedCards.text];
@@ -194,19 +144,6 @@ const Level7 = ({ setCompletedLevels }) => {
       setShowWrongPopup(true); // Show wrong popup
     }
   };
-
-  // const handleBoxClick = () => {
-  //   if (selectedCards) {
-  //     const userSequence = [selectedCards];
-  //     const correctSequenceIds = correctSequence.map((card) => card.id);
-  //     const userSequenceIds = userSequence.map((card) => card.id);
-  //     if (userSequenceIds.join(",") === correctSequenceIds.join(",")) {
-  //       setShowSuccessPopup(true); // Show success popup
-  //     } else {
-  //       setShowWrongPopup(true); // Show wrong popup
-  //     }
-  //   }
-  // };
 
   const handleSuccessClose = (nextLevel) => {
     setShowSuccessPopup(false);
@@ -233,17 +170,6 @@ const Level7 = ({ setCompletedLevels }) => {
     // setDeck(reshuffledDeck);
   };
 
-  // const codeSelection = () => {
-  //   const level3Result = JSON.parse(localStorage.getItem("level3Result")) || [];
-  //   for (let i = 0; i < level3Result.length; i++) {
-  //     if (level3Result[i] === "H") {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  //   // console.log(level3Result);
-  // };
-
   return (
     <div
       className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
@@ -252,14 +178,17 @@ const Level7 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
@@ -286,7 +215,6 @@ const Level7 = ({ setCompletedLevels }) => {
           ))}
         </div>
 
-
       {/* Selected card box */}
       <div>
           <h2 className="text-slate-50 text-center text-2xl font-bold mt-14">
@@ -296,12 +224,6 @@ const Level7 = ({ setCompletedLevels }) => {
       <div className="mt-8 w-48 h-24 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
-        {/* <div className="flex w-full mt-10">
-          <h2 className="text-xl text-blue-600 font-bold">
-            Time Remaining: {countdown} seconds
-          </h2>
-        </div> */}
-
         {/* Success Popup for Correct Sequence */}
         {showSuccessPopup && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
