@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CustomAlert from './CustomAlert'; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level15 = ({ setCompletedLevels }) => {
@@ -13,6 +13,7 @@ const Level15 = ({ setCompletedLevels }) => {
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [result, SetResult] = useState([]);
   // const [countdown, setCountdown] = useState(1000);
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel15 = () => {
     // Mark level 7 as completed
@@ -20,7 +21,7 @@ const Level15 = ({ setCompletedLevels }) => {
     localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
     
     const array = [];
-    array.push( selectedCards.text);
+    array.push(selectedCards.text);
     console.log(array);
     localStorage.setItem("level15Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
@@ -37,8 +38,11 @@ const Level15 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
-  
+
   const initialDeck = [
     { id: 1, text: 'Discharge after 24 hours' },
     { id: 2, text: 'Discharge after 4 hours of observation' },
@@ -234,57 +238,62 @@ const Level15 = ({ setCompletedLevels }) => {
 
   return (
     <div
-    className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
-    style={{
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: "cover",
-    }}
-  >
-    {/* Icons on the top-right corner */}
-    <div className="absolute top-4 right-4 flex items-center gap-4">
-      <div className="flex items-center gap-2 cursor-pointer">
-        <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-        {/*<h2 className="text-xl text-blue-600 font-bold">
-         {countdown} s
-        </h2>*/}
-      </div>
-      <div className="flex items-center gap-2 cursor-pointer">
-        <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-        <span className="text-slate-50 text-sm sm:text-base">Help</span>
-      </div>
-    </div>
-    <div className="flex items-center justify-between w-full">
-      {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
-      <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
-      Options available when WBCT comes clotted in all occasions:
-          </h2>
-      
-    </div>
-
-    {/* Display all deck cards in a grid format */}
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
-          {deck.map((card) => (
-            <div
-              key={card.id}
-              className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
-              onClick={() => selectCard(card, setSelectedCards)}
-            >
-              <p>{card.text}</p>
-            </div>
-          ))}
+      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+      }}
+    >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
         </div>
+      </div>
+      {/* Icons on the top-right corner */}
+      <div className="absolute top-4 right-4 flex items-center gap-4">
+        <div className="flex items-center gap-2 cursor-pointer">
+          <FaClock className="text-slate-50 text-xl sm:text-2xl" />
+          {/*<h2 className="text-xl text-blue-600 font-bold">
+           {countdown} s
+          </h2>*/}
+        </div>
+        <div className="flex items-center gap-2 cursor-pointer">
+          <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">Help</span>
+        </div>
+      </div>
+      <div className="flex items-center justify-between w-full">
+        {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
+        <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
+          Options available when WBCT comes clotted in all occasions:
+        </h2>
+      </div>
+
+      {/* Display all deck cards in a grid format */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
+        {deck.map((card) => (
+          <div
+            key={card.id}
+            className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
+            onClick={() => selectCard(card, setSelectedCards)}
+          >
+            <p>{card.text}</p>
+          </div>
+        ))}
+      </div>
 
       {/* Selected card box */}
       <div>
-          <h2 className="text-slate-50 text-center text-2xl font-bold mt-14">
-            Select the Correct Option
-          </h2>
-        </div>
+        <h2 className="text-slate-50 text-center text-2xl font-bold mt-14">
+          Select the Correct Option
+        </h2>
+      </div>
       <div className="mt-8 w-60 h-32 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
-        
+      
       {/* <div className="flex w-full mt-10">
         <h2 className="text-xl text-blue-600 font-bold">Time Remaining: {countdown} seconds</h2>
       </div> */}
