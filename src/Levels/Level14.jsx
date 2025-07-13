@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level14 = ({ setCompletedLevels }) => {
@@ -14,6 +14,7 @@ const Level14 = ({ setCompletedLevels }) => {
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [result, SetResult] = useState([]);
   // const [countdown, setCountdown] = useState(1000);
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel14 = () => {
     // Mark level 10 as completed
@@ -55,6 +56,9 @@ const Level14 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
 
   const initialDeck = [
@@ -276,11 +280,17 @@ const Level14 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
           {/*<h2 className="text-xl text-blue-600 font-bold">
            {countdown} s
           </h2>*/}
@@ -337,61 +347,61 @@ const Level14 = ({ setCompletedLevels }) => {
         </div>
       </div>
 
-        {/* <div className="flex w-full mt-10">
+      {/* <div className="flex w-full mt-10">
           <h2 className="text-xl text-blue-600 font-bold">
             Time Remaining: {countdown} seconds
           </h2>
         </div> */}
 
-        {/* Success Popup for Correct Sequence */}
-        {showSuccessPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-              <h2 className="text-2xl font-bold text-green-600 mb-4">
-                Your choices are correct
-              </h2>
-              <button
-                onClick={() => {
-                  handleCompleteLevel14();
-                  navigate("/level13")}} // Redirect to Level 12
-                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
-              >
-                Situation 1: Improvement seen after 1 hour
-              </button>
+      {/* Success Popup for Correct Sequence */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
+            <h2 className="text-2xl font-bold text-green-600 mb-4">
+              Your choices are correct
+            </h2>
+            <button
+              onClick={() => {
+                handleCompleteLevel14();
+                navigate("/level13")}} // Redirect to Level 12
+              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+            >
+              Situation 1: Improvement seen after 1 hour
+            </button>
 
-              <button
-                onClick={() => {
-                  handleCompleteLevel14();
-                  navigate("/level16")}} // Redirect to Level 15
-                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
-              >
-                Situation 1: Not improving after 1 hour 
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                handleCompleteLevel14();
+                navigate("/level16")}} // Redirect to Level 15
+              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+            >
+              Situation 1: Not improving after 1 hour 
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Wrong Popup for Incorrect Sequence */}
-        {showWrongPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-              <h2 className="text-2xl font-bold text-red-400 mb-4">
+      {/* Wrong Popup for Incorrect Sequence */}
+      {showWrongPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
+            <h2 className="text-2xl font-bold text-red-400 mb-4">
               Your choices are incorrect!
-              </h2>
-              {/* <p className="mb-6">You have selected the wrong sequence.</p> */}
-              <button
-                className="bg-red-400 text-white px-4 py-2 rounded-md"
-                onClick={() => {
-                  setShowWrongPopup(false);
-                  resetGame();
-                }}
-              >
-                Try Again
-              </button>
-            </div>
+            </h2>
+            {/* <p className="mb-6">You have selected the wrong sequence.</p> */}
+            <button
+              className="bg-red-400 text-white px-4 py-2 rounded-md"
+              onClick={() => {
+                setShowWrongPopup(false);
+                resetGame();
+              }}
+            >
+              Try Again
+            </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
   );
 };
 
