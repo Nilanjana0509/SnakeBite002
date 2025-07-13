@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 import companyImage from "/whatsapp.jpg";
 
@@ -20,8 +20,8 @@ const Level1 = ({ setCompletedLevels }) => {
   const [showImage, setShowImage] = useState(true);
   const [showRules, setShowRules] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [starCount, setStarCount] = useState(0);
 
-  // Handle image display for 04 seconds and transition to rules
   useEffect(() => {
     console.log("Image display started");
     const timer = setTimeout(() => {
@@ -30,6 +30,17 @@ const Level1 = ({ setCompletedLevels }) => {
       setShowRules(true);
     }, 4000);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
+  }, []);
+
+  useEffect(() => {
+    const shuffledDeck = shuffle([...initialDeck]);
+    setDeck(shuffledDeck);
   }, []);
 
   const handleCompleteLevel1 = () => {
@@ -67,26 +78,6 @@ const Level1 = ({ setCompletedLevels }) => {
     { id: 9, text: "Tell the doctor of any emergent sign" },
   ];
 
-  useEffect(() => {
-    setDeck(initialDeck);
-  }, []);
-
-  useEffect(() => {
-    const shuffledDeck = shuffle([...initialDeck]);
-    setDeck(shuffledDeck);
-  }, []);
-
-  useEffect(() => {
-    if (
-      selectedCards1.text !== undefined &&
-      selectedCards2.text !== undefined &&
-      selectedCards3.text !== undefined &&
-      selectedCards4.text !== undefined
-    ) {
-      res();
-    }
-  }, [selectedCards1, selectedCards2, selectedCards3, selectedCards4]);
-
   const selectCard = (card, boxSetter) => {
     if (!card || !card.text) return;
     boxSetter(card);
@@ -118,42 +109,42 @@ const Level1 = ({ setCompletedLevels }) => {
   };
 
   const getText1 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      SetResult((prevResult) => [...prevResult, deck]);
-      setSelectedCards1(deck);
-      setDeck(initialDeck[1]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setSelectedCards1(deck[0]);
+      setDeck(deck.slice(1));
     }
   };
 
   const getText2 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      setSelectedCards2(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
-      setDeck(initialDeck[2]);
+      setSelectedCards2(deck[0]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setDeck(deck.slice(1));
     }
   };
 
   const getText3 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      setSelectedCards3(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
-      setDeck(initialDeck[3]);
+      setSelectedCards3(deck[0]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setDeck(deck.slice(1));
     }
   };
 
   const getText4 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      setSelectedCards4(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
-      setDeck({});
+      setSelectedCards4(deck[0]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setDeck([]);
     }
   };
 
@@ -163,11 +154,9 @@ const Level1 = ({ setCompletedLevels }) => {
       selectedCards2.text,
       selectedCards3.text,
       selectedCards4.text,
-    ];
-    const correctCards = correctSequence.map((card) => card.text);
-    const isCorrect = selectedCards.every((selectedCard) =>
-      correctCards.includes(selectedCard)
-    );
+    ].filter(text => text);
+    const correctCards = correctSequence.map(card => card.text);
+    const isCorrect = selectedCards.length === correctCards.length && selectedCards.every(card => correctCards.includes(card));
     if (isCorrect) {
       console.log("correct");
       setShowSuccessPopup(true);
@@ -188,7 +177,7 @@ const Level1 = ({ setCompletedLevels }) => {
     setSelectedCards2({});
     setSelectedCards3({});
     setSelectedCards4({});
-    setDeck(initialDeck);
+    setDeck(shuffle([...initialDeck]));
   };
 
   const handleBoxClick = (card, boxSetter) => {
@@ -202,6 +191,17 @@ const Level1 = ({ setCompletedLevels }) => {
     setShowRules(false);
     setGameStarted(true);
   };
+
+  useEffect(() => {
+    if (
+      selectedCards1.text &&
+      selectedCards2.text &&
+      selectedCards3.text &&
+      selectedCards4.text
+    ) {
+      res();
+    }
+  }, [selectedCards1, selectedCards2, selectedCards3, selectedCards4]);
 
   return (
     <div
@@ -256,6 +256,12 @@ const Level1 = ({ setCompletedLevels }) => {
       )}
       {gameStarted && (
         <div className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto">
+          <div className="absolute top-4 left-4 flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+              <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+            </div>
+          </div>
           <div className="absolute top-4 right-4 flex items-center gap-4">
             <div className="flex items-center gap-2 cursor-pointer">
               <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
@@ -315,7 +321,7 @@ const Level1 = ({ setCompletedLevels }) => {
                       )
                     }
                   >
-                    <p className="text-sm text-center">{card.text}</p>
+                    <p className="text-sm text-center">{card.text || ""}</p>
                   </div>
                 )
               )}
