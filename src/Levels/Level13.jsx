@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level13 = ({ setCompletedLevels }) => {
@@ -12,6 +12,7 @@ const Level13 = ({ setCompletedLevels }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   // const [countdown, setCountdown] = useState(1000);
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel13 = () => {
     // Mark level 10 as completed
@@ -40,7 +41,6 @@ const Level13 = ({ setCompletedLevels }) => {
     setCompletedLevels(completedLevels);
 
     // Navigate to FinalResult13 based on path condition
-    // Navigate to FinalResult13 based on path condition
     const isPathB =
       localStorage.getItem("level10Result") &&
       localStorage.getItem("level14Result");
@@ -60,6 +60,9 @@ const Level13 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
 
   const initialDeck = [
@@ -73,16 +76,6 @@ const Level13 = ({ setCompletedLevels }) => {
   const correctSequence = [
     { id: 1, text: "Discharge only when no neuro-deficit present" },
   ];
-
-  // Shuffle the deck when the component mounts
-  // useEffect(() => {
-  //   const shuffledDeck = shuffle(Array.from(initialDeck.entries()));
-  //   setDeck(shuffledDeck);
-  // }, []);
-
-  // useEffect(() => {
-  //   setDeck(initialDeck); // Set the first card as the initial card
-  // }, []);
 
   // Function to shuffle an array
   const shuffle = (array) => {
@@ -105,70 +98,6 @@ const Level13 = ({ setCompletedLevels }) => {
       res();
     }
   }, [selectedCards]);
-
-  // useEffect(() => {
-  //   if (countdown <= 0) {
-  //     resetGame(); // Reload the page when countdown reaches zero
-  //     return;
-  //   }
-
-  //   // Set the interval to decrease countdown every second (1000 ms)
-  //   const timer = setInterval(() => {
-  //     setCountdown((prev) => prev - 1);
-  //   }, 1000);
-
-  //   // Cleanup the interval on component unmount
-  //   return () => clearInterval(timer);
-  // }, [countdown]);
-
-  // Shuffle function
-  // const shuffle = (array) => {
-  //   for (let i = array.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [array[i], array[j]] = [array[j], array[i]];
-  //   }
-  //   return array;
-  // };
-
-  // function getRandomObject() {
-  //   const randomIndex = Math.floor(Math.random() * initialDeck.length);
-  //   return initialDeck[randomIndex];
-  // }
-
-  // const initialfun = () => {
-  //   setDeck(getRandomObject());
-  // };
-
-  // const getText = () => {
-  //   if (deck.text === undefined) {
-  //     alert("Please select the card from the deck");
-  //   } else {
-  //     setSelectedCards(deck);
-  //     SetResult((prevResult) => [...prevResult, deck]);
-  //     initialfun();
-  //     // handleBoxClick(setSelectedCards);
-  //   }
-  // };
-
-  // const res = () => {
-  //   // console.log('sdsds');
-  //   console.log(selectedCards);
-
-  //   if (
-  //     selectedCards.id === correctSequence[0].id
-  //   ) {
-  //     // console.log('correct');
-  //     setShowSuccessPopup(true);
-  //   } else {
-  //     // console.log("incorrect");
-  //     setShowWrongPopup(true); // Show wrong popup
-  //   }
-
-  //   // if(result.length>=3){
-  //   //   console.log(result);
-
-  //   // }
-  // };
 
   // Function to select a card from the deck
   const selectCard = (card, boxSetter) => {
@@ -218,19 +147,6 @@ const Level13 = ({ setCompletedLevels }) => {
     }
   };
 
-  // const handleBoxClick = () => {
-  //   if (selectedCards ) {
-  //     const userSequence = [selectedCards];
-  //     const correctSequenceIds = correctSequence.map((card) => card.id);
-  //     const userSequenceIds = userSequence.map((card) => card.id);
-  //     if (userSequenceIds.join(',') === correctSequenceIds.join(',')) {
-  //       setShowSuccessPopup(true); // Show success popup
-  //     } else {
-  //       setShowWrongPopup(true); // Show wrong popup
-  //     }
-  //   }
-  // };
-
   const handleSuccessClose = () => {
     setShowSuccessPopup(false);
     handleCompleteLevel13();
@@ -243,16 +159,7 @@ const Level13 = ({ setCompletedLevels }) => {
     // Reset the deck
     setDeck(initialDeck);
     setDeckIndex(0); // Show the first card from the deck
-
-    // Reshuffle the deck
-    // const reshuffledDeck = shuffle(Array.from(initialDeck.entries()));
-    // setDeck(reshuffledDeck);
   };
-
-  // const handleWrongClose = () => {
-  //   // setShowWrongPopup(false);
-  //   // Optional: Reset the selected cards here if necessary
-  // };
 
   return (
     <div
@@ -262,14 +169,17 @@ const Level13 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
@@ -277,7 +187,6 @@ const Level13 = ({ setCompletedLevels }) => {
         </div>
       </div>
       <div className="flex items-center justify-between w-full">
-        {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
         <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
           Options available when there is persistent improvement seen after 1 hour:
         </h2>
@@ -306,10 +215,6 @@ const Level13 = ({ setCompletedLevels }) => {
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
 
-      {/* <div className="flex w-full mt-10">
-          <h2 className="text-xl text-blue-600 font-bold">Time Remaining: {countdown} seconds</h2>
-        </div> */}
-
       {/* Success Popup for Correct Sequence */}
       {showSuccessPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -333,7 +238,6 @@ const Level13 = ({ setCompletedLevels }) => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
             <h2 className="text-2xl font-bold text-red-400 mb-4">Your choices are incorrect</h2>
-            {/* <p className="mb-6">You have selected the wrong sequence.</p> */}
             <button
               className="bg-red-400 text-white px-4 py-2 rounded-md"
               onClick={() => {
