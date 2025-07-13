@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level11 = ({ setCompletedLevels }) => {
@@ -16,6 +16,7 @@ const Level11 = ({ setCompletedLevels }) => {
   const [result, SetResult] = useState([]);
   // const [countdown, setCountdown] = useState(1000);
   const [level3Selection, setLevel3Selection] = useState(null);
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel11 = () => {
     // Mark level 10 as completed
@@ -61,6 +62,9 @@ const Level11 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
 
   const initialDeck = [
@@ -105,7 +109,7 @@ const Level11 = ({ setCompletedLevels }) => {
     const shuffledDeck = shuffle(initialDeck);
     setDeck(shuffledDeck);
   }, []);
-  
+
   useEffect(() => {
     if (
       selectedCards1.text !== undefined &&
@@ -323,11 +327,17 @@ const Level11 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
           {/*<h2 className="text-xl text-blue-600 font-bold">
            {countdown} s
           </h2>*/}
@@ -356,7 +366,6 @@ const Level11 = ({ setCompletedLevels }) => {
     </div>
   ))}
 </div>
-
 
       {/* Selected Boxes */}
       <div className="text-xl w-full h-30">
