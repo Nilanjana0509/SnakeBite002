@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import backgroundImage from "../assets/images/snake11.png";
-import { FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaStar } from "react-icons/fa";
 
 const Level2 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [level2Selection, setLevel2Selection] = useState(null);
   const [deck, setDeck] = useState([]);
   const [deckIndex, setDeckIndex] = useState(null);
@@ -15,6 +16,7 @@ const Level2 = ({ setCompletedLevels }) => {
   const [selectedCards5, setSelectedCards5] = useState({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
+  const [starCount, setStarCount] = useState(0);
 
   const initialDeck = [
     { id: 1, text: "Secure Respiration and Airway" },
@@ -48,8 +50,19 @@ const Level2 = ({ setCompletedLevels }) => {
   };
 
   useEffect(() => {
+    const prevValue = location.state?.prev || "1"; // Default to "1" if not present
+    console.log("Level 2 prev value:", prevValue);
+    if (!location.state?.prev) {
+      console.warn("State.prev is missing, using default. Consider proper navigation.");
+    }
     const shuffledDeck = shuffleDeck([...initialDeck]);
     setDeck(shuffledDeck);
+  }, [location, navigate]);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, []);
 
   const selectCard = (card, boxSetter) => {
@@ -132,7 +145,7 @@ const Level2 = ({ setCompletedLevels }) => {
     localStorage.setItem("completedLevels", JSON.stringify(completedLevels));
     setCompletedLevels(completedLevels);
     console.log("Navigating to:", path);
-    navigate(path);
+    navigate(path, { state: { prev: location.state?.prev + '-2' || "1-2" } });
   };
 
   return (
@@ -143,6 +156,12 @@ const Level2 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
