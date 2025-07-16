@@ -50,13 +50,23 @@ const Level2 = ({ setCompletedLevels }) => {
   };
 
   useEffect(() => {
-    const prevValue = location.state?.prev || "1"; // Default to "1" if not present
+    const prevValue = location.state?.prev || "1";
     console.log("Level 2 prev value:", prevValue);
     if (!location.state?.prev) {
       console.warn("State.prev is missing, using default. Consider proper navigation.");
     }
     const shuffledDeck = shuffleDeck([...initialDeck]);
     setDeck(shuffledDeck);
+
+    // Trigger success popup if navigated from Result5 with triggerSuccess
+    if (location.state?.triggerSuccess) {
+      setSelectedCards1(location.state.selectedCards1 || {});
+      setSelectedCards2(location.state.selectedCards2 || {});
+      setSelectedCards3(location.state.selectedCards3 || {});
+      setSelectedCards4(location.state.selectedCards4 || {});
+      setSelectedCards5(location.state.selectedCards5 || {});
+      setShowSuccessPopup(true);
+    }
   }, [location, navigate]);
 
   useEffect(() => {
@@ -156,18 +166,18 @@ const Level2 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
-      <div className="absolute top-4 left-4 flex items-center gap-4">
+      <div className="absolute top-10 left-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
           <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
         </div>
       </div>
-      <div className="absolute top-4 right-4 flex items-center gap-4">
+      <div className="absolute top-10 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
         </div>
       </div>
-      <h2 className="text-2xl font-bold text-slate-50 mx-auto">
+      <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10">
         How would you like to manage the patient initially?
       </h2>
 
@@ -175,7 +185,7 @@ const Level2 = ({ setCompletedLevels }) => {
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-36 h-24 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
+            className="border w-36 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
             onClick={() =>
               selectCard(
                 card,
@@ -191,7 +201,7 @@ const Level2 = ({ setCompletedLevels }) => {
               )
             }
           >
-            <p>{card.text}</p>
+            <p className="text-xs break-words text-center">{card.text}</p>
           </div>
         ))}
       </div>
