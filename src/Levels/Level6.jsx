@@ -228,14 +228,14 @@ const Level6 = ({ setCompletedLevels }) => {
       }}
     >
       {/* Star count on the top-left corner */}
-      <div className="absolute top-4 left-4 flex items-center gap-4">
+      <div className="absolute top-10 left-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
           <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
         </div>
       </div>
       {/* Icons on the top-right corner */}
-      <div className="absolute top-4 right-4 flex items-center gap-4">
+      <div className="absolute top-10 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
         </div>
@@ -245,7 +245,7 @@ const Level6 = ({ setCompletedLevels }) => {
         </div>
       </div>
       <div className="flex items-center justify-between w-full">
-        <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 text-center">
+        <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10"> {/* Added mt-10 to push header down */}
           5 mins after starting AVS, patient develops Anaphylactoid reactions.<br />{" "}
           Options available for management:
         </h2>
@@ -256,10 +256,10 @@ const Level6 = ({ setCompletedLevels }) => {
   {deck.map((card) => (
     <div
       key={card.id}
-      className="border w-36 h-24 border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
+      className="border w-36 h-32 border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
       onClick={() => selectCard(card)} // Use selectCard to handle selection and removal
     >
-      <p>{card.text}</p>
+      <p className="text-xs break-words text-center">{card.text}</p> {/* Reduced font size to text-xs and used break-words */}
     </div>
   ))}
 </div>
