@@ -56,7 +56,18 @@ const FinalResult5 = () => {
       if (pathData !== null) {
         localStorage.setItem("path", pathData);
       }
-      navigate("/level1");
+      // Navigate to Level 2 with state to trigger the success popup
+      navigate("/level2", { 
+        state: { 
+          prev: "1-2", 
+          triggerSuccess: true,
+          selectedCards1: { text: "Secure Respiration and Airway" },
+          selectedCards2: { text: "Admit the patient" },
+          selectedCards3: { text: "Start IVF with NS/5D" },
+          selectedCards4: { text: "Inj. Tetanus Toxoid" },
+          selectedCards5: { text: "20 WBCT" }
+        }
+      });
     }
   };
 
