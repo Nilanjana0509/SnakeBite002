@@ -256,19 +256,19 @@ const Level1 = ({ setCompletedLevels }) => {
       )}
       {gameStarted && (
         <div className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto">
-          <div className="absolute top-4 left-4 flex items-center gap-4">
+          <div className="absolute top-10 left-4 flex items-center gap-4"> {/* Adjusted top from 4 to 10 */}
             <div className="flex items-center gap-2">
               <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
               <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
             </div>
           </div>
-          <div className="absolute top-4 right-4 flex items-center gap-4">
+          <div className="absolute top-10 right-4 flex items-center gap-4"> {/* Adjusted top from 4 to 10 */}
             <div className="flex items-center gap-2 cursor-pointer">
               <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-slate-50 mx-auto">
+          <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10"> {/* Added mt-10 to push header down */}
             You have come across a patient of Snake bite. Now choose appropriate
             actions
           </h2>
