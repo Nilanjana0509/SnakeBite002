@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
+import { FaClock, FaStar, FaQuestionCircle } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level6 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [deck, setDeck] = useState([]); // Track the deck of cards
   const [deckIndex, setDeckIndex] = useState(null); // Track the current deck index
   const [selectedCards1, setSelectedCards1] = useState({});
@@ -14,11 +15,10 @@ const Level6 = ({ setCompletedLevels }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [result, SetResult] = useState([]);
-  // const [countdown, setCountdown] = useState(1000);
-  const [level3Selection, setLevel3Selection] = useState(null);
+  const [level3Selection, setLevel3Selection] = useState("");
   const [starCount, setStarCount] = useState(0);
 
-  const handleCompleteLevel6 = () => {
+  const handleCompleteLevel6 = (nextLevel) => {
     // Mark level 6 as completed
     const completedLevels = {
       level1: true,
@@ -38,18 +38,19 @@ const Level6 = ({ setCompletedLevels }) => {
     console.log(array);
     localStorage.setItem("level6Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
-    // console.log(level);
 
-    // Navigate to level 7
-    if (codeSelection()) {
-      // Navigate to Level 7
-      navigate("/level7");
-    } else {
-      // Navigate to Level 8
-      navigate("/level8");
-    }
+    // Navigate to the specified next level
+    navigate(nextLevel, { state: { prev: location.state?.prev + '-' + 6 } });
   };
+
   useEffect(() => {
+    console.log(location.state?.prev);
+    
+    if (!location.state?.prev) {
+      alert("You are not allowed to access Level 6!");
+      navigate("/level1"); // Redirect to home or another page
+    }
+
     // Save the current level path to localStorage
     localStorage.setItem("currentLevel", location.pathname);
 
@@ -58,10 +59,13 @@ const Level6 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+  }, [location, navigate]);
+
+  useEffect(() => {
     const data = JSON.parse(localStorage.getItem("path")) || {};
     const trueCount = Object.values(data).filter(value => value === true).length;
     setStarCount(trueCount);
-  }, [location, navigate]);
+  }, []);
 
   const initialDeck = [
     { id: 1, text: "Inj. Adrenalin" },
@@ -82,6 +86,11 @@ const Level6 = ({ setCompletedLevels }) => {
     { id: 3, text: "IM" },
   ];
 
+  // Shuffle the deck when the component mounts
+  useEffect(() => {
+    setDeck(shuffle(initialDeck));
+  }, []);
+
   // Function to shuffle the deck
   const shuffle = (array) => {
     const shuffledArray = [...array];
@@ -95,11 +104,6 @@ const Level6 = ({ setCompletedLevels }) => {
     return shuffledArray;
   };
 
-  // Initialize shuffled deck when the component mounts
-  useEffect(() => {
-    setDeck(shuffle(initialDeck));
-  }, []);
-
   useEffect(() => {
     if (
       selectedCards1.text !== undefined &&
@@ -111,11 +115,9 @@ const Level6 = ({ setCompletedLevels }) => {
   }, [selectedCards1, selectedCards2, selectedCards3]);
 
   useEffect(() => {
-    // Retrieve the selection from Level 2 from localStorage
-    const level3Result = JSON.parse(localStorage.getItem("level3Result")) || [];
-    if (level3Result) {
-      setLevel3Selection(level3Result);
-    }
+    // Retrieve the selected envenomation type from Level 3
+    const envenomationType = localStorage.getItem("selectedEnvenomationType") || "";
+    setLevel3Selection(envenomationType);
   }, []);
 
   // Function to select a card from the deck
@@ -134,14 +136,9 @@ const Level6 = ({ setCompletedLevels }) => {
       return;
     }
 
-    // Remove selected card from deck and show the next card
+    // Remove selected card from deck
     const newDeck = deck.filter((c) => c.id !== card.id);
     setDeck(newDeck);
-    if (newDeck.length > 0) {
-      setDeckIndex(0); // Show the first card from the remaining deck
-    } else {
-      setDeckIndex(null); // No more cards left in the deck
-    }
   };
 
   // Function to move to the next card in the deck
@@ -194,29 +191,40 @@ const Level6 = ({ setCompletedLevels }) => {
     }
   };
 
-  const handleSuccessClose = () => {
+  const handleSuccessClose = (nextLevel) => {
     setShowSuccessPopup(false);
-    handleCompleteLevel6();
+    handleCompleteLevel6(nextLevel);
   };
 
   const resetGame = () => {
-    // setCountdown(1000);
     // Reset the selected cards
     setSelectedCards1({});
     setSelectedCards2({});
     setSelectedCards3({});
-    setDeck(initialDeck); // Reset to the first card in the deck
+    setDeck(initialDeck); // Reset to the initial deck
   };
 
-  const codeSelection = () => {
-    const level3Result = JSON.parse(localStorage.getItem("level3Result")) || [];
-    for (let i = 0; i < level3Result.length; i++) {
-      if (level3Result[i] === "H") {
-        return false;
-      }
+  const res1 = (card) => {
+    console.log(card);
+    setSelectedCards1({});
+    const newCards = [...deck, card];
+    setDeck(newCards);
+  };
+
+  const res2 = (card) => {
+    console.log(card);
+    setSelectedCards2({});
+    const newCards = [...deck, card];
+    setDeck(newCards);
+  };
+
+  const getNextLevel = () => {
+    if (level3Selection === "Haemotoxic Envenomation") {
+      return "/level11"; // Redirect to Level 11 for Situation 1 or 12 for Situation 2
+    } else if (level3Selection === "Neurotoxic Envenomation") {
+      return "/level7"; // Redirect to Level 7 for Neurological sign
     }
-    return true;
-    // console.log(level3Result);
+    return "/level7"; // Default to Level 7
   };
 
   return (
@@ -228,59 +236,70 @@ const Level6 = ({ setCompletedLevels }) => {
       }}
     >
       {/* Star count on the top-left corner */}
-      <div className="absolute top-10 left-4 flex items-center gap-4">
+      <div className="absolute top-4 left-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
           <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
         </div>
       </div>
+
       {/* Icons on the top-right corner */}
-      <div className="absolute top-10 right-4 flex items-center gap-4">
-        <div className="flex items-center gap-2 cursor-pointer">
-          <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-        </div>
+      <div className="absolute top-4 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">Help</span>
         </div>
       </div>
-      <div className="flex items-center justify-between w-full">
-        <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10"> {/* Added mt-10 to push header down */}
+      <div className="flex items-center justify-between w-full mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 text-center">
           5 mins after starting AVS, patient develops Anaphylactoid reactions.<br />{" "}
           Options available for management:
         </h2>
       </div>
 
       {/* Deck Display */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
-  {deck.map((card) => (
-    <div
-      key={card.id}
-      className="border w-36 h-32 border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
-      onClick={() => selectCard(card)} // Use selectCard to handle selection and removal
-    >
-      <p className="text-xs break-words text-center">{card.text}</p> {/* Reduced font size to text-xs and used break-words */}
-    </div>
-  ))}
-</div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-10 mx-auto">
+        {deck.map((card) => (
+          <div
+            key={card.id}
+            className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
+            style={{ minWidth: "100px", minHeight: "80px" }}
+            onClick={() => selectCard(card)}
+          >
+            <p className="text-center">{card.text}</p>
+          </div>
+        ))}
+      </div>
 
       {/* Selected Boxes */}
-      <div className="text-xl w-full h-30">
+      <div className="text-xl w-full">
         <div>
           <h2 className="text-slate-50 text-center text-2xl font-bold">
             Select Correct options
           </h2>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-8 mt-4">
-          {[selectedCards1, selectedCards2, selectedCards3].map((card, idx) => (
-            <div
-              key={idx}
-              className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
-            >
-              <p className="text-md text-center">{card.text}</p>
-            </div>
-          ))}
+        <div className="flex flex-wrap justify-center gap-4 mt-4">
+          <div
+            className="border-2 border-blue-400 bg-gray-100 rounded-lg shadow-md text-gray-700 flex justify-center items-center text-sm sm:text-base p-2"
+            style={{ minWidth: "120px", minHeight: "90px" }}
+            onClick={() => res1(selectedCards1)}
+          >
+            <p className="text-center">{selectedCards1.text}</p>
+          </div>
+          <div
+            className="border-2 border-blue-400 bg-gray-100 rounded-lg shadow-md text-gray-700 flex justify-center items-center text-sm sm:text-base p-2"
+            style={{ minWidth: "120px", minHeight: "90px" }}
+            onClick={() => res2(selectedCards2)}
+          >
+            <p className="text-center">{selectedCards2.text}</p>
+          </div>
+          <div
+            className="border-2 border-blue-400 bg-gray-100 rounded-lg shadow-md text-gray-700 flex justify-center items-center text-sm sm:text-base p-2"
+            style={{ minWidth: "120px", minHeight: "90px" }}
+          >
+            <p className="text-center">{selectedCards3.text}</p>
+          </div>
         </div>
       </div>
 
@@ -288,37 +307,31 @@ const Level6 = ({ setCompletedLevels }) => {
       {showSuccessPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-            <h2 className="text-2xl font-bold text-green-600 mb-4">
+            <h2 className="text-2xl font-bold text-amber-600 mb-4">
               Your choices are correct
             </h2>
-            {codeSelection() ? (
-              <button
-                onClick={() => handleCompleteLevel6()}
-                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
-              >
-                Situation: Neurological sign
-              </button>
-            ) : (
+            {level3Selection === "Haemotoxic Envenomation" ? (
               <>
                 <button
-                  onClick={() => {
-                    handleCompleteLevel6();
-                    navigate("/level11"); // Redirect to Level 11
-                  }}
-                  className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+                  onClick={() => handleSuccessClose("/level11")}
+                  className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg"
                 >
                   Situation 1: Initial WBCT result shows clotted
                 </button>
                 <button
-                  onClick={() => {
-                    handleCompleteLevel6();
-                    navigate("/level12"); // Redirect to Level 12
-                  }}
-                  className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+                  onClick={() => handleSuccessClose("/level12")}
+                  className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg"
                 >
                   Situation 2: Initial WBCT result shows not clotted
                 </button>
               </>
+            ) : (
+              <button
+                onClick={() => handleSuccessClose("/level7")}
+                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg"
+              >
+                Situation: Neurological sign
+              </button>
             )}
           </div>
         </div>
