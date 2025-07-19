@@ -64,7 +64,18 @@ const FinalResult16 = () => {
       if (pathData !== null) {
         localStorage.setItem("path", pathData);
       }
-      navigate("/level1");
+      // Navigate to Level 2 with state to trigger the success popup
+      const level2Result = JSON.parse(localStorage.getItem("level2Result")) || [];
+      navigate("/level2", { 
+        state: { 
+          prev: "1-2", 
+          triggerSuccess: true,
+          ...level2Result.reduce((acc, text, index) => ({
+            ...acc,
+            [`selectedCards${index + 1}`]: { text }
+          }), {})
+        }
+      });
     }
   };
 
