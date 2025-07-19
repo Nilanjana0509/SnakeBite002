@@ -181,30 +181,30 @@ const Level11 = ({ setCompletedLevels }) => {
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
-  {deck.map((card) => (
-    <div
-      key={card.id}
-      className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
-      onClick={() => selectCard(card)}
-    >
-      <p className="text-xs break-words text-center">{card.text}</p>
-    </div>
-  ))}
-</div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-20 items-center mx-auto max-w-4xl">
+        {deck.map((card) => (
+          <div
+            key={card.id}
+            className="border border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 w-full h-24 flex items-center justify-center"
+            onClick={() => selectCard(card)}
+          >
+            <p className="text-xs break-words text-center">{card.text}</p>
+          </div>
+        ))}
+      </div>
 
-      <div className="text-xl w-full h-30">
+      <div className="text-xl w-full">
         <div>
           <h2 className="text-slate-50 text-center text-2xl font-bold">
             Select Correct options
           </h2>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-8 mt-4">
+        <div className="flex flex-wrap justify-center gap-4 mt-4 max-w-2xl mx-auto">
           {[selectedCards1, selectedCards2, selectedCards3].map((card, idx) => (
             <div
               key={idx}
-              className="border-2 border-blue-400 w-60 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
+              className="border-2 border-blue-400 w-full sm:w-1/3 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
             >
               <p className="text-md text-center">{card.text}</p>
             </div>
