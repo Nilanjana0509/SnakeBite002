@@ -29,7 +29,7 @@ const Level2 = ({ setCompletedLevels }) => {
     { id: 8, text: "Start Antibiotics immediately" },
     { id: 9, text: "Sedate with Diazepam" },
     { id: 10, text: "10 WBCT" },
-    { id: 11, text: "20 WBCT" },
+    { id: 11, text: "20 WBCT (may be omitted in case of obvious signs of hemorrhage)" },
     { id: 12, text: "PT, INR" },
   ];
 
@@ -38,7 +38,7 @@ const Level2 = ({ setCompletedLevels }) => {
     { id: 2, text: "Admit the patient" },
     { id: 3, text: "Start IVF with NS/5D" },
     { id: 4, text: "Inj. Tetanus Toxoid" },
-    { id: 11, text: "20 WBCT" },
+    { id: 11, text: "20 WBCT (may be omitted in case of obvious signs of hemorrhage)" },
   ];
 
   const shuffleDeck = (deck) => {
