@@ -9,7 +9,6 @@ const FinalResult5 = () => {
   const [allResults, setAllResults] = useState({});
   const navigate = useNavigate();
 
-  // Define custom titles for levels
   const levelTitles = {
     level1Result: "You have come across a patient of Snake bite",
     level2Result: "Initial Management",
@@ -17,7 +16,6 @@ const FinalResult5 = () => {
     level5Result: "No sign of Envenomation",
   };
 
-  // Function to check the number of completed paths
   const getCompletedPathsCount = () => {
     const pathData = JSON.parse(localStorage.getItem("path")) || {};
     return Object.values(pathData).filter(value => value === true).length;
@@ -36,7 +34,6 @@ const FinalResult5 = () => {
     };
     setAllResults(results);
 
-    // Mark the current path as completed
     const currentPath = "1-2-3-5";
     const prevPath = JSON.parse(localStorage.getItem("path")) || {};
     if (!prevPath[currentPath]) {
@@ -45,7 +42,6 @@ const FinalResult5 = () => {
     }
   }, []);
 
-  // Function to handle Home button click
   const handleHomeClick = () => {
     const completedPaths = getCompletedPathsCount();
     if (completedPaths === 8) {
@@ -71,7 +67,6 @@ const FinalResult5 = () => {
     }
   };
 
-  // Function to handle Exit button click
   const handleExitClick = () => {
     const completedPaths = getCompletedPathsCount();
     if (completedPaths === 8) {
@@ -81,10 +76,8 @@ const FinalResult5 = () => {
     }
   };
 
-  // Function to confirm exit and reset game
   const confirmExit = () => {
-    localStorage.clear(); // Clear all data
-    // Reset to a new game state with all paths false
+    localStorage.clear();
     const resetData = {
       "1-2-3-5": false,
       "1-2-3-4-6-11-15": false,
@@ -96,7 +89,7 @@ const FinalResult5 = () => {
       "1-2-3-4-6-7-10-14-16": false
     };
     localStorage.setItem("path", JSON.stringify(resetData));
-    window.location.href = "https://google.com"; // Redirect to ensure a fresh start
+    window.location.href = "https://google.com";
   };
 
   return (
