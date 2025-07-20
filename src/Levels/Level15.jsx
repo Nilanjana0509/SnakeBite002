@@ -144,7 +144,7 @@ const Level15 = ({ setCompletedLevels }) => {
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
+            className="border w-40 h-24 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200" // Reduced from w-48 h-32 to w-40 h-24
             onClick={() => selectCard(card, setSelectedCards)}
           >
             <p className="text-xs break-words text-center">{card.text}</p>
@@ -157,7 +157,7 @@ const Level15 = ({ setCompletedLevels }) => {
           Select the Correct Option
         </h2>
       </div>
-      <div className="mt-8 w-60 h-32 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
+      <div className="mt-8 w-40 h-24 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700"> {/* Reduced from w-60 h-32 to w-40 h-24 */}
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
 
