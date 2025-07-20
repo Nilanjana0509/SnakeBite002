@@ -165,7 +165,7 @@ const Level12 = ({ setCompletedLevels }) => {
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 w-full h-24 flex items-center justify-center"
+            className="border border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 w-full h-24 flex items-center justify-center" // Reduced from h-24 to h-24 (no change needed)
             onClick={() => {
               if (!selectedCards1.text) {
                 selectCard(card, setSelectedCards1);
@@ -192,7 +192,7 @@ const Level12 = ({ setCompletedLevels }) => {
           {[selectedCards1, selectedCards2].map((card, idx) => (
             <div
               key={idx}
-              className="border-2 border-blue-400 w-full sm:w-1/2 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
+              className="border-2 border-blue-400 w-full sm:w-1/2 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105" // Reduced from h-24 to h-24 (no change needed)
             >
               <p className="text-md text-center">{card.text}</p>
             </div>
