@@ -14,7 +14,7 @@ const Level2 = ({ setCompletedLevels }) => {
   const [selectedCards3, setSelectedCards3] = useState({});
   const [selectedCards4, setSelectedCards4] = useState({});
   const [selectedCards5, setSelectedCards5] = useState({});
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Only path selection popup
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [starCount, setStarCount] = useState(0);
 
@@ -53,19 +53,19 @@ const Level2 = ({ setCompletedLevels }) => {
     const prevValue = location.state?.prev || "1";
     console.log("Level 2 prev value:", prevValue);
     if (!location.state?.prev) {
-      console.warn("State.prev is missing, using default. Consider proper navigation.");
+      console.warn("State.prev is missing, consider proper navigation.");
     }
     const shuffledDeck = shuffleDeck([...initialDeck]);
     setDeck(shuffledDeck);
 
-    // Trigger success popup if navigated from Result5 with triggerSuccess
+    // Directly trigger path selection popup if navigated from Result5 with triggerSuccess
     if (location.state?.triggerSuccess) {
       setSelectedCards1(location.state.selectedCards1 || {});
       setSelectedCards2(location.state.selectedCards2 || {});
       setSelectedCards3(location.state.selectedCards3 || {});
       setSelectedCards4(location.state.selectedCards4 || {});
       setSelectedCards5(location.state.selectedCards5 || {});
-      setShowSuccessPopup(true);
+      setShowSuccessPopup(true); // Directly show path selection
     }
   }, [location, navigate]);
 
@@ -89,8 +89,10 @@ const Level2 = ({ setCompletedLevels }) => {
     else setDeckIndex(0);
   };
 
+  // Only check sequence if not triggered by triggerSuccess
   useEffect(() => {
     if (
+      !location.state?.triggerSuccess &&
       selectedCards1.text &&
       selectedCards2.text &&
       selectedCards3.text &&
@@ -105,6 +107,7 @@ const Level2 = ({ setCompletedLevels }) => {
     selectedCards3,
     selectedCards4,
     selectedCards5,
+    location.state?.triggerSuccess,
   ]);
 
   const checkSequence = () => {
@@ -115,12 +118,10 @@ const Level2 = ({ setCompletedLevels }) => {
       selectedCards4.text,
       selectedCards5.text,
     ];
-
     const correctCards = correctSequence.map((card) => card.text);
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
     );
-
     if (isCorrect) {
       setShowSuccessPopup(true);
       localStorage.setItem("level2Result", JSON.stringify(selectedCards));
@@ -129,8 +130,9 @@ const Level2 = ({ setCompletedLevels }) => {
     }
   };
 
-  const handleSuccessClose = () => {
+  const handleSuccessClose = (path) => {
     setShowSuccessPopup(false);
+    handleCompleteLevel2(path);
   };
 
   const resetGame = () => {
@@ -161,10 +163,7 @@ const Level2 = ({ setCompletedLevels }) => {
   return (
     <div
       className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-      }}
+      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
     >
       <div className="absolute top-10 left-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
