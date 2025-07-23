@@ -5,6 +5,7 @@ import { FaClock, FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level12 = ({ setCompletedLevels }) => {
+  const location=useLocation();
   const navigate = useNavigate();
   const [deck, setDeck] = useState([]);
   const [deckIndex, setDeckIndex] = useState(null);
@@ -40,7 +41,7 @@ const Level12 = ({ setCompletedLevels }) => {
     localStorage.setItem("level12Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
 
-    const origin = localStorage.getItem("origin");
+    const origin = location.state?.origin;
     navigate("/result12", { state: { origin } });
   };
   useEffect(() => {

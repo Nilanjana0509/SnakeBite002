@@ -40,7 +40,7 @@ const Level6 = ({ setCompletedLevels }) => {
     setCompletedLevels(completedLevels);
 
     // Navigate to the specified next level
-    navigate(nextLevel, { state: { prev: location.state?.prev + '-' + 6 } });
+    navigate(nextLevel, { state: { prev: location.state?.prev + '-' + 6 }, origin: 'level6' });
   };
 
   useEffect(() => {
