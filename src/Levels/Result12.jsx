@@ -4,9 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 const FinalResult12 = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const origin = location.state?.origin || "unknown";
+  const origin = location.state?.origin || "level6"; // Default to "level6" to ensure correct path
   const [allResults, setAllResults] = useState({});
-  const [showStarPopup, setShowStarPopup] = useState(true);
+  const [showStarPopup, setShowStarPopup] = useState(false); // Triggered on Home click
   const [showWarningPopup, setShowWarningPopup] = useState(false);
   const [showCompletionPopup, setShowCompletionPopup] = useState(false);
 
@@ -22,7 +22,13 @@ const FinalResult12 = () => {
 
   const getCompletedPathsCount = () => {
     const pathData = JSON.parse(localStorage.getItem("path")) || {};
-    return Object.values(pathData).filter(value => value === true).length;
+    return Object.values(pathData).filter((value) => value === true).length;
+  };
+
+  const getUnawardedPaths = () => {
+    const pathData = JSON.parse(localStorage.getItem("path")) || {};
+    const awardedPaths = JSON.parse(localStorage.getItem("awardedPaths")) || {};
+    return ["1-2-3-4-6-12", "1-2-3-4-6-11-12"].filter(path => pathData[path] && !awardedPaths[path]);
   };
 
   const handlepopup = () => {
@@ -31,57 +37,76 @@ const FinalResult12 = () => {
 
   useEffect(() => {
     const results = {
-      level1Result: JSON.parse(localStorage.getItem("level1Result")),
-      level2Result: JSON.parse(localStorage.getItem("level2Result")),
-      level3Result: JSON.parse(localStorage.getItem("level3TextResult")),
-      level4Result: JSON.parse(localStorage.getItem("level4Result")),
-      level6Result: JSON.parse(localStorage.getItem("level6Result")),
-      level11Result: JSON.parse(localStorage.getItem("level11Result")),
-      level12Result: JSON.parse(localStorage.getItem("level12Result")),
+      level1Result: JSON.parse(localStorage.getItem("level1Result")) || [],
+      level2Result: JSON.parse(localStorage.getItem("level2Result")) || [],
+      level3Result: JSON.parse(localStorage.getItem("level3TextResult")) || [],
+      level4Result: JSON.parse(localStorage.getItem("level4Result")) || [],
+      level6Result: JSON.parse(localStorage.getItem("level6Result")) || [],
+      level11Result: JSON.parse(localStorage.getItem("level11Result")) || [],
+      level12Result: JSON.parse(localStorage.getItem("level12Result")) || [],
     };
 
-    if (origin === "level6") {
+    // Exclude level11Result for path 1-2-3-4-6-12 if no Level 11 data
+    if (origin === "level6" && (!results.level11Result || results.level11Result.length === 0)) {
       delete results.level11Result;
     }
     setAllResults(results);
 
-    // Mark the current path as completed
-    const currentPath = origin === "level6" ? "1-2-3-4-6-12" : "1-2-3-4-6-11-12";
-    const prevPath = JSON.parse(localStorage.getItem("path")) || {};
+    // Determine and update the current path
+    const currentPath = results.level11Result && results.level11Result.length > 0 ? "1-2-3-4-6-11-12" : "1-2-3-4-6-12";
+    let prevPath = JSON.parse(localStorage.getItem("path")) || {
+      "1-2-3-5": false,
+      "1-2-3-4-6-11-15": false,
+      "1-2-3-4-6-11-12": false,
+      "1-2-3-4-6-12": false,
+      "1-2-3-4-6-7-9-13": false,
+      "1-2-3-4-6-7-10-13": false,
+      "1-2-3-4-6-7-10-14-13": false,
+      "1-2-3-4-6-7-10-14-16": false,
+    };
     if (!prevPath[currentPath]) {
       prevPath[currentPath] = true;
       localStorage.setItem("path", JSON.stringify(prevPath));
     }
+    console.log("Origin:", origin);
+    console.log("Current Path:", currentPath);
+    console.log("Level11 Result:", results.level11Result);
   }, [origin]);
 
   const handleHomeClick = () => {
-    const completedPaths = getCompletedPathsCount();
-    if (completedPaths === 8) {
-      setShowCompletionPopup(true);
+    const unawardedPaths = getUnawardedPaths();
+    if (unawardedPaths.length > 0) {
+      // Award a star for the first unawarded path
+      const awardedPaths = JSON.parse(localStorage.getItem("awardedPaths")) || {};
+      awardedPaths[unawardedPaths[0]] = true;
+      localStorage.setItem("awardedPaths", JSON.stringify(awardedPaths));
+      setShowStarPopup(true); // Show star popup
+    } else if (getCompletedPathsCount() >= 8) {
+      setShowCompletionPopup(true); // Show completion if all 8 paths done
     } else {
+      // Continue game
       const pathData = localStorage.getItem("path");
       localStorage.clear();
       if (pathData !== null) {
         localStorage.setItem("path", pathData);
       }
-      // Navigate to Level 2 with state to trigger the success popup
       const level2Result = JSON.parse(localStorage.getItem("level2Result")) || [];
-      navigate("/level2", { 
-        state: { 
-          prev: "1-2", 
+      navigate("/level2", {
+        state: {
+          prev: "1-2",
           triggerSuccess: true,
           ...level2Result.reduce((acc, text, index) => ({
             ...acc,
-            [`selectedCards${index + 1}`]: { text }
-          }), {})
-        }
+            [`selectedCards${index + 1}`]: { text },
+          }), {}),
+        },
       });
     }
   };
 
   const handleExitClick = () => {
     const completedPaths = getCompletedPathsCount();
-    if (completedPaths === 8) {
+    if (completedPaths >= 8) {
       setShowCompletionPopup(true);
     } else {
       setShowWarningPopup(true);
@@ -98,7 +123,7 @@ const FinalResult12 = () => {
       "1-2-3-4-6-7-9-13": false,
       "1-2-3-4-6-7-10-13": false,
       "1-2-3-4-6-7-10-14-13": false,
-      "1-2-3-4-6-7-10-14-16": false
+      "1-2-3-4-6-7-10-14-16": false,
     };
     localStorage.setItem("path", JSON.stringify(resetData));
     window.location.href = "https://google.com";
@@ -110,7 +135,7 @@ const FinalResult12 = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm text-center">
             <h2 className="text-lg sm:text-2xl font-bold text-amber-600 mb-4">
-              You completed one path and achieved one star.
+              You completed the path and achieved one star!
             </h2>
             <button
               className="bg-amber-950 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-md"
@@ -131,7 +156,7 @@ const FinalResult12 = () => {
             <div className="w-full max-w-lg bg-white p-4 rounded-lg shadow-lg">
               <ul>
                 {Object.entries(allResults)
-                  .filter(([_, result]) => result)
+                  .filter(([_, result]) => result && result.length)
                   .map(([level, result], index) => (
                     <li key={index} className="mb-4">
                       <h3 className="text-xl font-semibold text-gray-700">
@@ -161,7 +186,7 @@ const FinalResult12 = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
                 <h2 className="text-lg font-bold text-red-600 mb-4">
-                  You'll lose all your stars you collected, if you press Exit now!
+                  You'll lose all your stars you collected if you press Exit now!
                 </h2>
                 <div className="flex justify-center space-x-4">
                   <button
@@ -186,10 +211,10 @@ const FinalResult12 = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
             <h2 className="text-lg font-bold text-amber-600 mb-4">
-              Congratulations! You have collected all the 8 stars and successfully completed the game.
+              Congratulations! You have collected all 8 stars and successfully completed the game.
             </h2>
             <p className="text-gray-600 mb-4">
-              Now you can exit or you can start over again.
+              Now you can exit or start over again.
             </p>
             <div className="flex justify-center space-x-4">
               <button
@@ -212,7 +237,7 @@ const FinalResult12 = () => {
                     "1-2-3-4-6-7-9-13": false,
                     "1-2-3-4-6-7-10-13": false,
                     "1-2-3-4-6-7-10-14-13": false,
-                    "1-2-3-4-6-7-10-14-16": false
+                    "1-2-3-4-6-7-10-14-16": false,
                   };
                   localStorage.clear();
                   localStorage.setItem("path", JSON.stringify(resetData));
