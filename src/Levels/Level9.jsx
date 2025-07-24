@@ -381,14 +381,6 @@ const Level9 = ({ setCompletedLevels }) => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 mt-4">
-          {/* {[selectedCards1, selectedCards2, selectedCards3].map((card, idx) => (
-            <div
-              key={idx}
-              className="border-2 border-blue-400 w-60 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
-            >
-              <p className="text-md ttext-slate-50ext-center">{card.text}</p>
-            </div>
-          ))} */}
           <div
             // key={idx}
             className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105" // Reduced from w-60 h-32 to w-40 h-24
