@@ -47,7 +47,7 @@ const Level14 = ({ setCompletedLevels }) => {
   useEffect(() => {
     if (!location.state?.prev) {
       alert("You are not allowed to access Level 14!");
-      navigate("/"); // Redirect to home or another page
+      navigate("/");
     }
 
     localStorage.setItem('currentLevel', location.pathname);
