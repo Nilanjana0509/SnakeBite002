@@ -236,7 +236,7 @@ const Level6 = ({ setCompletedLevels }) => {
       }}
     >
       {/* Star count on the top-left corner */}
-      <div className="absolute top-4 left-4 flex items-center gap-4">
+      <div className="absolute top-10 left-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
           <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
@@ -244,61 +244,66 @@ const Level6 = ({ setCompletedLevels }) => {
       </div>
 
       {/* Icons on the top-right corner */}
-      <div className="absolute top-4 right-4 flex items-center gap-4">
+      <div className="absolute top-10 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">Help</span>
         </div>
       </div>
-      <div className="flex items-center justify-between w-full mt-6 mb-3">
-        <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 text-center">
+      <div className="flex items-center justify-between w-full">
+        <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10">
           5 mins after starting AVS, patient develops Anaphylactoid reactions.<br />{" "}
           Options available for management:
         </h2>
       </div>
 
-      {/* Deck Display */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-10 mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
-            style={{ minWidth: "100px", minHeight: "80px" }}
-            onClick={() => selectCard(card)}
+            className="border w-36 h-32 border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
+            onClick={() => {
+              if (!selectedCards1.text) {
+                selectCard(card);
+              } else if (!selectedCards2.text) {
+                selectCard(card);
+              } else if (!selectedCards3.text) {
+                selectCard(card);
+              } else {
+                console.log("All selections are filled.");
+              }
+            }}
           >
-            <p className="text-center">{card.text}</p>
+            <p className="text-xs break-words text-center">{card.text}</p>
           </div>
         ))}
       </div>
 
       {/* Selected Boxes */}
-      <div className="text-xl w-full">
+      <div className="text-xl w-full h-30">
         <div>
-          <h2 className="text-slate-50 text-center text-2xl font-bold">
+          <h2 className="text-center text-slate-50 text-2xl font-bold">
             Select Correct options
           </h2>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mt-4">
+        <div className="flex flex-wrap justify-center gap-8 mt-4">
           <div
-            className="border-2 border-blue-400 bg-gray-100 rounded-lg shadow-md text-gray-700 flex justify-center items-center text-sm sm:text-base p-2"
-            style={{ minWidth: "120px", minHeight: "90px" }}
+            className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
             onClick={() => res1(selectedCards1)}
           >
-            <p className="text-center">{selectedCards1.text}</p>
+            <p className="text-md text-center">{selectedCards1.text}</p>
           </div>
           <div
-            className="border-2 border-blue-400 bg-gray-100 rounded-lg shadow-md text-gray-700 flex justify-center items-center text-sm sm:text-base p-2"
-            style={{ minWidth: "120px", minHeight: "90px" }}
+            className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
             onClick={() => res2(selectedCards2)}
           >
-            <p className="text-center">{selectedCards2.text}</p>
+            <p className="text-md text-center">{selectedCards2.text}</p>
           </div>
           <div
-            className="border-2 border-blue-400 bg-gray-100 rounded-lg shadow-md text-gray-700 flex justify-center items-center text-sm sm:text-base p-2"
-            style={{ minWidth: "120px", minHeight: "90px" }}
+            className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
           >
-            <p className="text-center">{selectedCards3.text}</p>
+            <p className="text-md text-center">{selectedCards3.text}</p>
           </div>
         </div>
       </div>
