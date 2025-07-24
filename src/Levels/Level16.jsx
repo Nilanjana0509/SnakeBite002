@@ -36,7 +36,6 @@ const Level16 = ({ setCompletedLevels }) => {
     localStorage.setItem("level16Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
 
-    // Update path for the 8th star
     const currentPath = "1-2-3-4-6-7-10-14-16";
     const prevPath = JSON.parse(localStorage.getItem("path")) || {};
     prevPath[currentPath] = true;
