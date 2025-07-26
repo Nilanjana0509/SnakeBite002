@@ -234,7 +234,7 @@ const Level7 = ({ setCompletedLevels }) => {
     setCompletedLevels(completedLevels);
 
     // Navigate to the next level
-    navigate(nextLevel, { state: { prev: location.state.prev + '-' + 7 } });
+    navigate(nextLevel, { state: { prev: location.state?.prev + '-' + 7 } });
   };
 
   const resetGame = () => {

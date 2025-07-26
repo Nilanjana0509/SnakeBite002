@@ -131,10 +131,10 @@ const Level14 = ({ setCompletedLevels }) => {
     }
   };
 
-  const handleSuccessClose = () => {
+  const handleSuccessClose = (nextLevel) => {
     setShowSuccessPopup(false);
     handleCompleteLevel14();
-    navigate("/level13", { state: { prev: location.state.prev + '-' + 14 } });
+    navigate(nextLevel, { state: { prev: location.state?.prev + '-' + 14 } });
   };
 
   const resetGame = () => {
@@ -226,10 +226,16 @@ const Level14 = ({ setCompletedLevels }) => {
               Your choices are correct
             </h2>
             <button
-              onClick={handleSuccessClose}
-              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md "
+              onClick={() => handleSuccessClose("/level13")}
             >
-              Submit
+              Situation 1: Improvement seen after 1 hour
+            </button>
+            <button
+              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md "
+              onClick={() => handleSuccessClose("/level16")}
+            >
+              Situation 2: No improvement seen after 1 hour
             </button>
           </div>
         </div>

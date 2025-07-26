@@ -143,7 +143,7 @@ const Level10 = ({ setCompletedLevels }) => {
     setCompletedLevels(completedLevels);
     // Use a flag to indicate popup navigation and clear currentLevel if from popup
     localStorage.removeItem('currentLevel'); // Clear to prevent override
-    navigate(nextLevel, { state: { prev: location.state.prev + '-' + 10, fromPopup: true } });
+    navigate(nextLevel, { state: { prev: location.state?.prev + '-' + 10, fromPopup: true } });
   };
 
   const resetGame = () => {

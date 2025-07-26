@@ -58,7 +58,7 @@ const Level13 = ({ setCompletedLevels }) => {
     
     navigate("/result13", { state: { isPathA: isPathA, isPathB: isPathB, isPathC: isPathC } });
     
-    const path = location.state.prev + '-' + 13;
+    const path = location.state?.prev + '-' + 13;
     const storedData = JSON.parse(localStorage.getItem("path")) || {};
     if (storedData[path] == false) {
       storedData[path] = true; // Update to true
@@ -70,7 +70,7 @@ const Level13 = ({ setCompletedLevels }) => {
       alert("You are not allowed to access Level 13!");
       navigate("/level1"); // Redirect to home or another page
     }
-    const path = location.state.prev + '-' + 13;
+    const path = location.state?.prev + '-' + 13;
     const storedData = JSON.parse(localStorage.getItem("path")) || {};
     if (storedData[path]) {
       alert("You have completed this path");
