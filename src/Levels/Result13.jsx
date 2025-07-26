@@ -9,23 +9,24 @@ const FinalResult13 = () => {
   const [showCompletionPopup, setShowCompletionPopup] = useState(false);
 
   const pathA = ["level1Result", "level2Result", "level3Result", "level4Result", "level6Result", "level7Result", "level9Result", "level13Result"];
-  const pathB = ["level1Result", "level2Result", "level3Result", "level4Result", "level6Result", "level7Result", "level10Result", "level9Result", "level13Result"];
-  const pathC = ["level1Result", "level2Result", "level3Result", "level4Result", "level6Result", "level7Result", "level10Result", "level9Result", "level14Result", "level13Result"];
+  const pathB = ["level1Result", "level2Result", "level3Result", "level4Result", "level6Result", "level7Result", "level10Result", "level13Result"];
+  const pathC = ["level1Result", "level2Result", "level3Result", "level4Result", "level6Result", "level7Result", "level10Result", "level14Result", "level13Result"];
 
   const [allResults, setAllResults] = useState({});
 
-  const isPathB = location.state?.isPathB ?? false;
-  const isPathC = location.state?.isPathC ?? false;
+  const isPathA = location.state?.isPathA;
+  const isPathB = location.state?.isPathB;
+  const isPathC = location.state?.isPathC;
 
-  const useDisplayPath = (isPathB, isPathC) => {
+  const useDisplayPath = (isPathA, isPathB, isPathC) => {
     return React.useMemo(() => {
       if (isPathC) return pathC;
       if (isPathB) return pathB;
-      return pathA;
-    }, [isPathB, isPathC]);
+      if (isPathA) return pathA;
+    }, [isPathA, isPathB, isPathC]);
   };
 
-  const displayPath = useDisplayPath(isPathB, isPathC);
+  const displayPath = useDisplayPath(isPathA, isPathB, isPathC);
 
   const levelTitles = {
     level1Result: "You have come across a patient of Snake bite",
@@ -68,6 +69,7 @@ const FinalResult13 = () => {
 
     // Mark the current path as completed
     const currentPath = isPathC ? "1-2-3-4-6-7-10-14-13" : isPathB ? "1-2-3-4-6-7-10-13" : "1-2-3-4-6-7-9-13";
+    console.log("current path in level 13:", currentPath);
     const prevPath = JSON.parse(localStorage.getItem("path")) || {};
     if (!prevPath[currentPath]) {
       prevPath[currentPath] = true;
@@ -81,6 +83,7 @@ const FinalResult13 = () => {
       setShowCompletionPopup(true);
     } else {
       const pathData = localStorage.getItem("path");
+      console.log("completed path: ",pathData);
       localStorage.clear();
       if (pathData !== null) {
         localStorage.setItem("path", pathData);

@@ -44,15 +44,20 @@ const Level13 = ({ setCompletedLevels }) => {
 
     // Navigate to FinalResult13 based on path condition
     // Navigate to FinalResult13 based on path condition
-    const isPathB =
-      localStorage.getItem("level10Result") &&
-      localStorage.getItem("level14Result");
-
-    if (isPathB) {
-      navigate("/result13", { state: { isPathB: true } });
-    } else {
-      navigate("/result13", { state: { isPathB: false } });
+    const isPathA = localStorage.getItem("level9Result");
+    var isPathC, isPathB;
+    
+    if(localStorage.getItem("level10Result")){
+      if(localStorage.getItem("level14Result")){
+        isPathC = true;
+      }
+      else{
+        isPathB = true;
+      }
     }
+    
+    navigate("/result13", { state: { isPathA: isPathA, isPathB: isPathB, isPathC: isPathC } });
+    
     const path = location.state.prev + '-' + 13;
     const storedData = JSON.parse(localStorage.getItem("path")) || {};
     if (storedData[path] == false) {
