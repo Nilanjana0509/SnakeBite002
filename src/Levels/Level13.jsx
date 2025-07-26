@@ -32,7 +32,7 @@ const Level13 = ({ setCompletedLevels }) => {
       level11: true,
       level12: true,
       level13: true,
-      level14: true,
+      level14: false,
     };
     localStorage.setItem("completedLevels", JSON.stringify(completedLevels));
 

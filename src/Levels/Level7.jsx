@@ -25,7 +25,7 @@ const Level7 = ({ setCompletedLevels }) => {
       level1: true,
       level2: true,
       level3: true,
-      level4: false,
+      level4: true,
       level5: true,
       level6: true,
       level7: true,
