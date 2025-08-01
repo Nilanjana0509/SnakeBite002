@@ -360,11 +360,11 @@ const Level9 = ({ setCompletedLevels }) => {
       </div>
 
       {/* Deck Display */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-10 mx-auto">
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-40 h-24 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200" // Reduced from w-48 h-32 to w-40 h-24
+            className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
             onClick={() => selectCard(card)} // Use selectCard to handle selection and removal
           >
             <p>{card.text}</p>
