@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
-import companyImage from "../assets/images/company_logo.jpeg";
+import companyImage from "/whatsapp.jpg";
 
 const Level1 = ({ setCompletedLevels }) => {
   const location = useLocation();
@@ -20,16 +20,27 @@ const Level1 = ({ setCompletedLevels }) => {
   const [showImage, setShowImage] = useState(true);
   const [showRules, setShowRules] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [starCount, setStarCount] = useState(0);
 
-  // Handle image display for 30 seconds and transition to rules
   useEffect(() => {
     console.log("Image display started");
     const timer = setTimeout(() => {
-      console.log("Image fading out after 30 seconds");
+      console.log("Image fading out after 04 seconds");
       setShowImage(false);
       setShowRules(true);
-    }, 30000);
+    }, 4000);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
+  }, []);
+
+  useEffect(() => {
+    const shuffledDeck = shuffle([...initialDeck]);
+    setDeck(shuffledDeck);
   }, []);
 
   const handleCompleteLevel1 = () => {
@@ -67,26 +78,6 @@ const Level1 = ({ setCompletedLevels }) => {
     { id: 9, text: "Tell the doctor of any emergent sign" },
   ];
 
-  useEffect(() => {
-    setDeck(initialDeck);
-  }, []);
-
-  useEffect(() => {
-    const shuffledDeck = shuffle([...initialDeck]);
-    setDeck(shuffledDeck);
-  }, []);
-
-  useEffect(() => {
-    if (
-      selectedCards1.text !== undefined &&
-      selectedCards2.text !== undefined &&
-      selectedCards3.text !== undefined &&
-      selectedCards4.text !== undefined
-    ) {
-      res();
-    }
-  }, [selectedCards1, selectedCards2, selectedCards3, selectedCards4]);
-
   const selectCard = (card, boxSetter) => {
     if (!card || !card.text) return;
     boxSetter(card);
@@ -118,42 +109,42 @@ const Level1 = ({ setCompletedLevels }) => {
   };
 
   const getText1 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      SetResult((prevResult) => [...prevResult, deck]);
-      setSelectedCards1(deck);
-      setDeck(initialDeck[1]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setSelectedCards1(deck[0]);
+      setDeck(deck.slice(1));
     }
   };
 
   const getText2 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      setSelectedCards2(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
-      setDeck(initialDeck[2]);
+      setSelectedCards2(deck[0]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setDeck(deck.slice(1));
     }
   };
 
   const getText3 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      setSelectedCards3(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
-      setDeck(initialDeck[3]);
+      setSelectedCards3(deck[0]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setDeck(deck.slice(1));
     }
   };
 
   const getText4 = () => {
-    if (deck.text === undefined) {
+    if (!deck.length) {
       alert("Please select the card from the deck");
     } else {
-      setSelectedCards4(deck);
-      SetResult((prevResult) => [...prevResult, deck]);
-      setDeck({});
+      setSelectedCards4(deck[0]);
+      SetResult((prevResult) => [...prevResult, deck[0]]);
+      setDeck([]);
     }
   };
 
@@ -163,11 +154,9 @@ const Level1 = ({ setCompletedLevels }) => {
       selectedCards2.text,
       selectedCards3.text,
       selectedCards4.text,
-    ];
-    const correctCards = correctSequence.map((card) => card.text);
-    const isCorrect = selectedCards.every((selectedCard) =>
-      correctCards.includes(selectedCard)
-    );
+    ].filter(text => text);
+    const correctCards = correctSequence.map(card => card.text);
+    const isCorrect = selectedCards.length === correctCards.length && selectedCards.every(card => correctCards.includes(card));
     if (isCorrect) {
       console.log("correct");
       setShowSuccessPopup(true);
@@ -188,7 +177,7 @@ const Level1 = ({ setCompletedLevels }) => {
     setSelectedCards2({});
     setSelectedCards3({});
     setSelectedCards4({});
-    setDeck(initialDeck);
+    setDeck(shuffle([...initialDeck]));
   };
 
   const handleBoxClick = (card, boxSetter) => {
@@ -202,6 +191,17 @@ const Level1 = ({ setCompletedLevels }) => {
     setShowRules(false);
     setGameStarted(true);
   };
+
+  useEffect(() => {
+    if (
+      selectedCards1.text &&
+      selectedCards2.text &&
+      selectedCards3.text &&
+      selectedCards4.text
+    ) {
+      res();
+    }
+  }, [selectedCards1, selectedCards2, selectedCards3, selectedCards4]);
 
   return (
     <div
@@ -227,7 +227,7 @@ const Level1 = ({ setCompletedLevels }) => {
       )}
       {showRules && !gameStarted && (
         <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-90 z-50 p-4">
-          <div className="bg-gray-100 p-6 rounded-lg shadow-lg text-center border-4 border-gray-300">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-lg text-center border-4 border-gray-300 overflow-y-auto max-h-[70vh]">
             <h2 className="text-3xl font-bold mb-4">Rules of the Snake Bite Game</h2>
             <p className="mb-2 text-lg">
               A patient of snake bite needs your urgent help.
@@ -256,17 +256,19 @@ const Level1 = ({ setCompletedLevels }) => {
       )}
       {gameStarted && (
         <div className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto">
-          <div className="absolute top-4 right-4 flex items-center gap-4">
-            <div className="flex items-center gap-2 cursor-pointer">
-              <FaClock className="text-slate-50 text-xl sm:text-2xl" />
+          <div className="absolute top-10 left-4 flex items-center gap-4"> {/* Adjusted top from 4 to 10 */}
+            <div className="flex items-center gap-2">
+              <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+              <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
             </div>
+          </div>
+          <div className="absolute top-10 right-4 flex items-center gap-4"> {/* Adjusted top from 4 to 10 */}
             <div className="flex items-center gap-2 cursor-pointer">
               <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-              <span className="text-slate-50 text-sm sm:text-base">Help</span>
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold text-slate-50 mx-auto">
+          <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10"> {/* Added mt-10 to push header down */}
             You have come across a patient of Snake bite. Now choose appropriate
             actions
           </h2>
@@ -319,7 +321,7 @@ const Level1 = ({ setCompletedLevels }) => {
                       )
                     }
                   >
-                    <p className="text-sm text-center">{card.text}</p>
+                    <p className="text-sm text-center">{card.text || ""}</p>
                   </div>
                 )
               )}
@@ -367,9 +369,3 @@ const Level1 = ({ setCompletedLevels }) => {
 };
 
 export default Level1;
-
-
-/* The changes made to the `Level1.jsx` code include adding a company logo image that displays for 30 seconds and fades out, followed by a set of game rules with a "Start Playing" button to initiate the level. 
-A new state (`showImage`, `showRules`, `gameStarted`) was introduced along with a `useEffect` hook to manage the 30-second timer for the image transition to rules. 
-The rules section was styled to match the provided design, and the font sizes were adjusted with the header set to a larger, bold `text-3xl` and the body text to a slightly smaller `text-lg`.
-Debug console logs were added to troubleshoot image loading and state transitions, and the game content is only rendered after the "Start Playing" button is clicked, ensuring the original level logic remains intact within the new flow. */

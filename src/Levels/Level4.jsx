@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaStar } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level4 = ({ setCompletedLevels }) => {
@@ -16,6 +16,7 @@ const Level4 = ({ setCompletedLevels }) => {
   const [result, SetResult] = useState([]);
   const [level3Selection, setLevel3Selection] = useState(null);
   const [heading, setHeading] = useState("");
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel4 = (level) => {
     // Mark level 4 as completed
@@ -36,7 +37,7 @@ const Level4 = ({ setCompletedLevels }) => {
     setCompletedLevels(completedLevels);
 
     // Navigate to level 6
-    navigate(level);
+    navigate(level, { state: { prev: location.state?.prev + '-4' || "1-2-3-4" } });
   };
   useEffect(() => {
     // Save the current level path to localStorage
@@ -47,6 +48,9 @@ const Level4 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
 
   const initialDeck = [
@@ -65,12 +69,6 @@ const Level4 = ({ setCompletedLevels }) => {
     { id: 1, text: "AVS" },
     { id: 2, text: "10 vials in 1 hour" },
   ];
-
-  // // Shuffle the deck when the component mounts
-  // useEffect(() => {
-  //   const shuffledDeck = shuffle(Array.from(initialDeck.entries()));
-  //   setDeck(shuffledDeck);
-  // }, []);
 
   // Set initial deck without shuffling (no shuffle applied)
   useEffect(() => {
@@ -100,21 +98,6 @@ const Level4 = ({ setCompletedLevels }) => {
       res();
     }
   }, [selectedCards1, selectedCards2]);
-
-  // useEffect(() => {
-  //   if (countdown <= 0) {
-  //     resetGame(); // Reload the page when countdown reaches zero
-  //     return;
-  //   }
-
-  //   // Set the interval to decrease countdown every second (1000 ms)
-  //   const timer = setInterval(() => {
-  //     setCountdown((prev) => prev - 1);
-  //   }, 1000);
-
-  //   // Cleanup the interval on component unmount
-  //   return () => clearInterval(timer);
-  // }, [countdown]);
 
   useEffect(() => {
     // Retrieve the selection from Level 2 from localStorage
@@ -164,74 +147,6 @@ const Level4 = ({ setCompletedLevels }) => {
     }
   }, []);
 
-  // Shuffle function
-  // const shuffle = (array) => {
-  //   for (let i = array.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [array[i], array[j]] = [array[j], array[i]];
-  //   }
-  //   return array;
-  // };
-
-  // function getRandomObject() {
-  //   const randomIndex = Math.floor(Math.random() * initialDeck.length);
-  //   return initialDeck[randomIndex];
-  // }
-
-  // const initialfun = () => {
-  //   setDeck(getRandomObject());
-  // };
-
-  const getText1 = () => {
-    if (deck.text === undefined) {
-      alert("Please select the card from the deck");
-    } else {
-      const card = getNextCard();
-      setSelectedCards1(card);
-      SetResult((prevResult) => [...prevResult, card]);
-      // setSelectedCards1(deck);
-      // SetResult((prevResult) => [...prevResult, deck]);
-      // initialfun();
-      // handleBoxClick(deck, setSelectedCards2);
-    }
-  };
-
-  const getText2 = () => {
-    if (deck.text === undefined) {
-      alert("Please select the card from the deck");
-    } else {
-      const card = getNextCard();
-      setSelectedCards1(card);
-      SetResult((prevResult) => [...prevResult, card]);
-      // setSelectedCards2(deck);
-      // SetResult((prevResult) => [...prevResult, deck]);
-      // initialfun();
-      // handleBoxClick(setSelectedCards1, deck);
-    }
-  };
-
-  // const res = () => {
-  //   // console.log('sdsds');
-  //   console.log(selectedCards1);
-  //   console.log(selectedCards2);
-
-  //   if (
-  //     selectedCards1.id === correctSequence[0].id &&
-  //     selectedCards2.id === correctSequence[1].id
-  //   ) {
-  //     // console.log('correct');
-  //     setShowSuccessPopup(true);
-  //   } else {
-  //     // console.log("incorrect");
-  //     setShowWrongPopup(true); // Show wrong popup
-  //   }
-
-  //   // if(result.length>=3){
-  //   //   console.log(result);
-
-  //   // }
-  // };
-
   const res = () => {
     // Create an array of selected cards
     const selectedCards = [selectedCards1.text, selectedCards2.text];
@@ -280,10 +195,6 @@ const Level4 = ({ setCompletedLevels }) => {
     setDeckIndex(0); // Restart from the first card in the deck
     // Reset the deck to initial deck
     setDeck(initialDeck);
-
-    // Reshuffle the deck
-    // const reshuffledDeck = shuffle(Array.from(initialDeck.entries()));
-    // setDeck(reshuffledDeck);
   };
 
   const codeSelection = () => {
@@ -294,7 +205,6 @@ const Level4 = ({ setCompletedLevels }) => {
       }
     }
     return true;
-    // console.log(level3Result);
   };
 
   return (
@@ -305,23 +215,21 @@ const Level4 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
-      {/* Icons on the top-right corner */}
-      <div className="absolute top-4 right-4 flex items-center gap-4">
-        <div className="flex items-center gap-2 cursor-pointer">
-          <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-10 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
         </div>
+      </div>
+      {/* Icons on the top-right corner */}
+      <div className="absolute top-10 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-          <span className="text-slate-50 text-sm sm:text-base">Help</span>
         </div>
       </div>
       <div className="flex items-center justify-between w-full">
-        {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
-        <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
+        <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10"> {/* Added mt-10 to push header down */}
           {heading} {/* Render the heading dynamically */}
         </h2>
       </div>
@@ -330,7 +238,7 @@ const Level4 = ({ setCompletedLevels }) => {
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-48 h-32 border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
+            className="border w-36 h-32 border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
             onClick={() => {
               if (!selectedCards1.text) {
                 selectCard(card, setSelectedCards1);
@@ -341,7 +249,7 @@ const Level4 = ({ setCompletedLevels }) => {
               }
             }}
           >
-            <p>{card.text}</p>
+            <p className="text-xs break-words text-center">{card.text}</p> {/* Reduced font size to text-xs and used break-words */}
           </div>
         ))}
       </div>
@@ -358,19 +266,13 @@ const Level4 = ({ setCompletedLevels }) => {
           {[selectedCards1, selectedCards2].map((card, idx) => (
             <div
               key={idx}
-              className="border-2 border-blue-400 w-60 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
+              className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
             >
               <p className="text-md text-center">{card.text}</p>
             </div>
           ))}
         </div>
       </div>
-
-      {/* <div className="flex w-full mt-10">
-          <h2 className="text-xl text-blue-600 font-bold">
-            Time Remaining: {countdown} seconds
-          </h2>
-        </div> */}
 
       {/* Success Popup for Correct Sequence */}
       {showSuccessPopup && (
@@ -384,8 +286,6 @@ const Level4 = ({ setCompletedLevels }) => {
                 onClick={() => handleCompleteLevel4("/level6")} // Ensure this function navigates correctly
                 className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
               >
-                {/* Hint: Scalp itching/ Hypotension/ Pain abdomen/ Vomiting/
-                Urticaria */}
                 Go to next step
               </button>
             )}
@@ -400,7 +300,6 @@ const Level4 = ({ setCompletedLevels }) => {
             <h2 className="text-2xl font-bold text-red-400 mb-4">
               Your choices are incorrect
             </h2>
-            {/* <p className="mb-6">You have selected the wrong sequence.</p> */}
             <button
               className="bg-red-400 text-white px-4 py-2 rounded-md"
               onClick={() => {

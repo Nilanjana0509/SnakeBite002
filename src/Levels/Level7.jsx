@@ -1,14 +1,13 @@
-// PN(7)
-
 import React, { useState, useEffect } from "react";
-import CustomAlert from "./CustomAlert"; 
+import CustomAlert from "./CustomAlert";
 import backgroundImage from "../assets/images/snake11.png";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaStar, FaQuestionCircle } from "react-icons/fa";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Level7 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [deck, setDeck] = useState([]); // Track the deck of cards
   const [deckIndex, setDeckIndex] = useState(null); // Track the current deck index
   const [selectedCards, setSelectedCards] = useState({});
@@ -17,6 +16,8 @@ const Level7 = ({ setCompletedLevels }) => {
   const [result, SetResult] = useState([]);
   // const [countdown, setCountdown] = useState(1000);
   const [level3Selection, setLevel3Selection] = useState(null);
+  const [starCount, setStarCount] = useState(0)
+
 
   const handleCompleteLevel7 = () => {
     // Mark level 7 as completed
@@ -24,14 +25,14 @@ const Level7 = ({ setCompletedLevels }) => {
       level1: true,
       level2: true,
       level3: true,
-      level4: false,
+      level4: true,
       level5: true,
       level6: true,
       level7: true,
       level8: false,
     };
     localStorage.setItem("completedLevels", JSON.stringify(completedLevels));
-    
+
     const array = [];
     array.push(selectedCards.text);
     console.log(array);
@@ -42,6 +43,12 @@ const Level7 = ({ setCompletedLevels }) => {
     // navigate(level);
   };
   useEffect(() => {
+
+    if (!location.state?.prev) {
+      alert("You are not allowed to access Level 7!");
+      navigate("/level1"); // Redirect to home or another page
+    }
+
     // Save the current level path to localStorage
     localStorage.setItem('currentLevel', location.pathname);
 
@@ -51,7 +58,14 @@ const Level7 = ({ setCompletedLevels }) => {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
   }, [location, navigate]);
-  
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
+  }, [])
+
+
   const initialDeck = [
     { id: 1, text: "Loading Atropine IV Neostigmine IM or IV" },
     { id: 2, text: "Atropine IV Neostigmine IM or IV maintenance dose" },
@@ -220,7 +234,7 @@ const Level7 = ({ setCompletedLevels }) => {
     setCompletedLevels(completedLevels);
 
     // Navigate to the next level
-    navigate(nextLevel);
+    navigate(nextLevel, { state: { prev: location.state?.prev + '-' + 7 } });
   };
 
   const resetGame = () => {
@@ -254,101 +268,108 @@ const Level7 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
-        <div className="flex items-center gap-2 cursor-pointer">
+{/*         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
 
-          {/*<h2 className="text-xl text-blue-600 font-bold">
-           {countdown} s
-          </h2>*/}
-        </div>
+          <h2 className="text-xl text-blue-600 font-bold">
+            {countdown}
+          </h2>
+        </div> */}
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">Help</span>
         </div>
       </div>
-    <div className="flex items-center justify-between w-full">
-      <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
-        Persistent Neurological signs despite 10 vials of AVS. Options available for management (Neurotoxic Envenomation):
-      </h2>
-    </div>
+      <div className="flex items-center justify-between w-full my-6">
+        <h2 className="text-2xl font-bold text-slate-50 mx-auto mb-6">
+          Persistent Neurological signs despite 10 vials of AVS. Options available for management (Neurotoxic Envenomation):
+        </h2>
+      </div>
 
-    
-        {/* Display all deck cards in a grid format */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
-          {deck.map((card) => (
-            <div
-              key={card.id}
-              className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
-              onClick={() => selectCard(card, setSelectedCards)}
-            >
-              <p>{card.text}</p>
-            </div>
-          ))}
-        </div>
+
+      {/* Display all deck cards in a grid format */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-10 mx-auto">
+        {deck.map((card) => (
+          <div
+            key={card.id}
+            className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
+            onClick={() => selectCard(card, setSelectedCards)}
+          >
+            <p>{card.text}</p>
+          </div>
+        ))}
+      </div>
 
 
       {/* Selected card box */}
       <div>
-          <h2 className="text-slate-50 text-center text-2xl font-bold mt-14">
-            Select the Correct Option
-          </h2>
-        </div>
-      <div className="mt-8 w-60 h-32 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
+        <h2 className="text-slate-50 text-center text-2xl font-bold mt-14">
+          Select the Correct Option
+        </h2>
+      </div>
+      <div className="mt-8 w-40 h-24 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700"> {/* Reduced from w-60 h-32 to w-40 h-24 */}
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
-        {/* <div className="flex w-full mt-10">
+      {/* <div className="flex w-full mt-10">
           <h2 className="text-xl text-blue-600 font-bold">
             Time Remaining: {countdown} seconds
           </h2>
-        </div> */}text-slate-50
+        </div> */}
 
-        {/* Success Popup for Correct Sequence */}
-        {showSuccessPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-              <h2 className="text-2xl font-bold text-green-600 mb-4">
-                Your choices are correct
-              </h2>
-              <button
-                onClick={() => handleSuccessClose("/level9")} // Navigate to Level 9
-                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
-              >
-                Situation 1: Improving after 30 min
-              </button>
+      {/* Success Popup for Correct Sequence */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
+            <h2 className="text-2xl font-bold text-amber-600 mb-4">
+              Your choices are correct
+            </h2>
+            <button
+              onClick={() => handleSuccessClose("/level9")} // Navigate to Level 9
+              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+            >
+              Situation 1: Improving after 30 min
+            </button>
 
-              <button
-                onClick={() => handleSuccessClose("/level10")} // Navigate to Level 10
-                className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
-              >
-                Situation 2: Not improving after 30 min
-              </button>
-            </div>
+            <button
+              onClick={() => handleSuccessClose("/level10")} // Navigate to Level 10
+              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-lg "
+            >
+              Situation 2: Not improving after 30 min
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Wrong Popup for Incorrect Sequence */}
-        {showWrongPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-              <h2 className="text-2xl font-bold text-red-400 mb-4">
-                Incorrect!
-              </h2>
-              <p className="mb-6">You have selected the wrong sequence.</p>
-              <button
-                className="bg-red-400 text-white px-4 py-2 rounded-md"
-                onClick={() => {
-                  setShowWrongPopup(false);
-                  resetGame();
-                }}
-              >
-                Try Again
-              </button>
-            </div>
+      {/* Wrong Popup for Incorrect Sequence */}
+      {showWrongPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
+            <h2 className="text-2xl font-bold text-red-400 mb-4">
+              Incorrect!
+            </h2>
+            <p className="mb-6">You have selected the wrong sequence.</p>
+            <button
+              className="bg-red-400 text-white px-4 py-2 rounded-md"
+              onClick={() => {
+                setShowWrongPopup(false);
+                resetGame();
+              }}
+            >
+              Try Again
+            </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
   );
 };
 export default Level7;

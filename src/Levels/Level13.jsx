@@ -1,19 +1,20 @@
-// PNIa(13) -> Submit
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaClock, FaStar, FaQuestionCircle } from "react-icons/fa";
 import backgroundImage from "../assets/images/snake11.png";
 
 const Level13 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [deck, setDeck] = useState([]); // Deck of cards
   const [deckIndex, setDeckIndex] = useState(null); // Track the current deck index
   const [selectedCards, setSelectedCards] = useState({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   // const [countdown, setCountdown] = useState(1000);
+  const [starCount, setStarCount] = useState(0)
+
 
   const handleCompleteLevel13 = () => {
     // Mark level 10 as completed
@@ -31,7 +32,7 @@ const Level13 = ({ setCompletedLevels }) => {
       level11: true,
       level12: true,
       level13: true,
-      level14: true,
+      level14: false,
     };
     localStorage.setItem("completedLevels", JSON.stringify(completedLevels));
 
@@ -43,17 +44,38 @@ const Level13 = ({ setCompletedLevels }) => {
 
     // Navigate to FinalResult13 based on path condition
     // Navigate to FinalResult13 based on path condition
-    const isPathB =
-      localStorage.getItem("level10Result") &&
-      localStorage.getItem("level14Result");
-
-    if (isPathB) {
-      navigate("/result13", { state: { isPathB: true } });
-    } else {
-      navigate("/result13", { state: { isPathB: false } });
+    const isPathA = localStorage.getItem("level9Result");
+    var isPathC, isPathB;
+    
+    if(localStorage.getItem("level10Result")){
+      if(localStorage.getItem("level14Result")){
+        isPathC = true;
+      }
+      else{
+        isPathB = true;
+      }
+    }
+    
+    navigate("/result13", { state: { isPathA: isPathA, isPathB: isPathB, isPathC: isPathC } });
+    
+    const path = location.state?.prev + '-' + 13;
+    const storedData = JSON.parse(localStorage.getItem("path")) || {};
+    if (storedData[path] == false) {
+      storedData[path] = true; // Update to true
+      localStorage.setItem("path", JSON.stringify(storedData));
     }
   };
   useEffect(() => {
+    if (!location.state?.prev) {
+      alert("You are not allowed to access Level 13!");
+      navigate("/level1"); // Redirect to home or another page
+    }
+    const path = location.state?.prev + '-' + 13;
+    const storedData = JSON.parse(localStorage.getItem("path")) || {};
+    if (storedData[path]) {
+      alert("You have completed this path");
+      navigate("/level1"); // Redirect to home or another page
+    }
     // Save the current level path to localStorage
     localStorage.setItem("currentLevel", location.pathname);
 
@@ -63,6 +85,12 @@ const Level13 = ({ setCompletedLevels }) => {
       navigate(savedLevel); // Navigate to the saved level if it's different
     }
   }, [location, navigate]);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
+  }, [])
 
   const initialDeck = [
     { id: 1, text: "Discharge only when no neuro-deficit present" },
@@ -264,21 +292,28 @@ const Level13 = ({ setCompletedLevels }) => {
         backgroundSize: "cover",
       }}
     >
+      {/* Star count on the top-left corner */}
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       {/* Icons on the top-right corner */}
       <div className="absolute top-4 right-4 flex items-center gap-4">
-        <div className="flex items-center gap-2 cursor-pointer">
+{/*         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
 
-          {/*<h2 className="text-xl text-blue-600 font-bold">
+          <h2 className="text-xl text-blue-600 font-bold">
            {countdown} s
-          </h2>*/}
-        </div>
+          </h2>
+        </div> */}
         <div className="flex items-center gap-2 cursor-pointer">
           <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
           <span className="text-slate-50 text-sm sm:text-base">Help</span>
         </div>
       </div>
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full my-6">
         {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
         <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
           Options available when there is persistent improvement seen after 1 hour:
@@ -286,11 +321,11 @@ const Level13 = ({ setCompletedLevels }) => {
       </div>
 
       {/* Display all deck cards in a grid format */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 mb-20 items-center mx-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-10 mx-auto">
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
+            className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
             onClick={() => selectCard(card, setSelectedCards)}
           >
             <p>{card.text}</p>
@@ -304,7 +339,7 @@ const Level13 = ({ setCompletedLevels }) => {
           Select the Correct Option
         </h2>
       </div>
-      <div className="mt-8 w-60 h-32 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
+      <div className="mt-8 w-40 h-24 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700"> {/* Reduced from w-60 h-32 to w-40 h-24 */}
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
 
@@ -316,7 +351,7 @@ const Level13 = ({ setCompletedLevels }) => {
       {showSuccessPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-            <h2 className="text-2xl font-bold text-green-600 mb-4">Your choices are correct</h2>
+            <h2 className="text-2xl font-bold text-amber-600 mb-4">Your choices are correct</h2>
             <h2 className="text-xl mb-4">
               To start the game again click on the button below
             </h2>

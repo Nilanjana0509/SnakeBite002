@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import backgroundImage from "../assets/images/snake11.png";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaStar } from "react-icons/fa";
 
 const Level3 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Level3 = ({ setCompletedLevels }) => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [selectedEnvenomationType, setSelectedEnvenomationType] = useState("");
   const [shuffledHistoryDeck, setShuffledHistoryDeck] = useState([]);
+  const [starCount, setStarCount] = useState(0);
 
   const handleCompleteLevel3 = (nextLevel) => {
     const completedLevels = {
@@ -35,7 +36,7 @@ const Level3 = ({ setCompletedLevels }) => {
     // Store the selected envenomation type
     localStorage.setItem("selectedEnvenomationType", selectedEnvenomationType);
     setCompletedLevels(completedLevels);
-    navigate(nextLevel);
+    navigate(nextLevel, { state: { prev: location.state?.prev + '-3' || "1-2-3" } });
   };
 
   useEffect(() => {
@@ -44,6 +45,9 @@ const Level3 = ({ setCompletedLevels }) => {
     if (savedLevel && savedLevel !== location.pathname) {
       navigate(savedLevel);
     }
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, [location, navigate]);
 
   useEffect(() => {
@@ -161,10 +165,16 @@ const Level3 = ({ setCompletedLevels }) => {
       className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
       style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
     >
+      <div className="absolute top-4 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
+        </div>
+      </div>
       <div className="absolute top-4 right-4 flex items-center gap-4">
-        <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-        <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-        <span className="text-slate-50 text-sm sm:text-base">Help</span>
+        <div className="flex items-center gap-2 cursor-pointer">
+          <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
+        </div>
       </div>
 
       <p className="text-2xl font-bold text-slate-50 mx-auto text-center mt-4">

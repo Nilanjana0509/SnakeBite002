@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import backgroundImage from "../assets/images/snake11.png";
-import { FaClock, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaStar } from "react-icons/fa";
 
 const Level2 = ({ setCompletedLevels }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [level2Selection, setLevel2Selection] = useState(null);
   const [deck, setDeck] = useState([]);
   const [deckIndex, setDeckIndex] = useState(null);
@@ -13,8 +14,9 @@ const Level2 = ({ setCompletedLevels }) => {
   const [selectedCards3, setSelectedCards3] = useState({});
   const [selectedCards4, setSelectedCards4] = useState({});
   const [selectedCards5, setSelectedCards5] = useState({});
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Only path selection popup
   const [showWrongPopup, setShowWrongPopup] = useState(false);
+  const [starCount, setStarCount] = useState(0);
 
   const initialDeck = [
     { id: 1, text: "Secure Respiration and Airway" },
@@ -27,7 +29,7 @@ const Level2 = ({ setCompletedLevels }) => {
     { id: 8, text: "Start Antibiotics immediately" },
     { id: 9, text: "Sedate with Diazepam" },
     { id: 10, text: "10 WBCT" },
-    { id: 11, text: "20 WBCT" },
+    { id: 11, text: "20 WBCT (may be omitted in case of obvious signs of hemorrhage)" },
     { id: 12, text: "PT, INR" },
   ];
 
@@ -36,7 +38,7 @@ const Level2 = ({ setCompletedLevels }) => {
     { id: 2, text: "Admit the patient" },
     { id: 3, text: "Start IVF with NS/5D" },
     { id: 4, text: "Inj. Tetanus Toxoid" },
-    { id: 11, text: "20 WBCT" },
+    { id: 11, text: "20 WBCT (may be omitted in case of obvious signs of hemorrhage)" },
   ];
 
   const shuffleDeck = (deck) => {
@@ -48,8 +50,29 @@ const Level2 = ({ setCompletedLevels }) => {
   };
 
   useEffect(() => {
+    const prevValue = location.state?.prev || "1";
+    console.log("Level 2 prev value:", prevValue);
+    if (!location.state?.prev) {
+      console.warn("State.prev is missing, consider proper navigation.");
+    }
     const shuffledDeck = shuffleDeck([...initialDeck]);
     setDeck(shuffledDeck);
+
+    // Directly trigger path selection popup if navigated from Result5 with triggerSuccess
+    if (location.state?.triggerSuccess) {
+      setSelectedCards1(location.state.selectedCards1 || {});
+      setSelectedCards2(location.state.selectedCards2 || {});
+      setSelectedCards3(location.state.selectedCards3 || {});
+      setSelectedCards4(location.state.selectedCards4 || {});
+      setSelectedCards5(location.state.selectedCards5 || {});
+      setShowSuccessPopup(true); // Directly show path selection
+    }
+  }, [location, navigate]);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("path")) || {};
+    const trueCount = Object.values(data).filter(value => value === true).length;
+    setStarCount(trueCount);
   }, []);
 
   const selectCard = (card, boxSetter) => {
@@ -66,8 +89,10 @@ const Level2 = ({ setCompletedLevels }) => {
     else setDeckIndex(0);
   };
 
+  // Only check sequence if not triggered by triggerSuccess
   useEffect(() => {
     if (
+      !location.state?.triggerSuccess &&
       selectedCards1.text &&
       selectedCards2.text &&
       selectedCards3.text &&
@@ -82,6 +107,7 @@ const Level2 = ({ setCompletedLevels }) => {
     selectedCards3,
     selectedCards4,
     selectedCards5,
+    location.state?.triggerSuccess,
   ]);
 
   const checkSequence = () => {
@@ -92,12 +118,10 @@ const Level2 = ({ setCompletedLevels }) => {
       selectedCards4.text,
       selectedCards5.text,
     ];
-
     const correctCards = correctSequence.map((card) => card.text);
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
     );
-
     if (isCorrect) {
       setShowSuccessPopup(true);
       localStorage.setItem("level2Result", JSON.stringify(selectedCards));
@@ -106,8 +130,9 @@ const Level2 = ({ setCompletedLevels }) => {
     }
   };
 
-  const handleSuccessClose = () => {
+  const handleSuccessClose = (path) => {
     setShowSuccessPopup(false);
+    handleCompleteLevel2(path);
   };
 
   const resetGame = () => {
@@ -132,27 +157,26 @@ const Level2 = ({ setCompletedLevels }) => {
     localStorage.setItem("completedLevels", JSON.stringify(completedLevels));
     setCompletedLevels(completedLevels);
     console.log("Navigating to:", path);
-    navigate(path);
+    navigate(path, { state: { prev: location.state?.prev + '-2' || "1-2" } });
   };
 
   return (
     <div
       className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-      }}
+      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
     >
-      <div className="absolute top-4 right-4 flex items-center gap-4">
-        <div className="flex items-center gap-2 cursor-pointer">
-          <FaClock className="text-slate-50 text-xl sm:text-2xl" />
-        </div>
-        <div className="flex items-center gap-2 cursor-pointer">
-          <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
-          <span className="text-slate-50 text-sm sm:text-base">Help</span>
+      <div className="absolute top-10 left-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FaStar className="text-yellow-500 text-xl sm:text-2xl" />
+          <span className="text-slate-50 text-sm sm:text-base">{starCount}</span>
         </div>
       </div>
-      <h2 className="text-2xl font-bold text-slate-50 mx-auto">
+      <div className="absolute top-10 right-4 flex items-center gap-4">
+        <div className="flex items-center gap-2 cursor-pointer">
+          <FaQuestionCircle className="text-slate-50 text-xl sm:text-2xl" />
+        </div>
+      </div>
+      <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10">
         How would you like to manage the patient initially?
       </h2>
 
@@ -160,7 +184,7 @@ const Level2 = ({ setCompletedLevels }) => {
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
+            className="border w-36 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
             onClick={() =>
               selectCard(
                 card,
@@ -176,7 +200,7 @@ const Level2 = ({ setCompletedLevels }) => {
               )
             }
           >
-            <p>{card.text}</p>
+            <p className="text-xs break-words text-center">{card.text}</p>
           </div>
         ))}
       </div>
@@ -187,16 +211,10 @@ const Level2 = ({ setCompletedLevels }) => {
         </h2>
       </div>
       <div className="flex flex-wrap justify-center gap-8 mt-4">
-        {[
-          selectedCards1,
-          selectedCards2,
-          selectedCards3,
-          selectedCards4,
-          selectedCards5,
-        ].map((card, idx) => (
+        {[selectedCards1, selectedCards2, selectedCards3, selectedCards4, selectedCards5].map((card, idx) => (
           <div
             key={idx}
-            className="border-2 border-blue-400 w-60 h-32 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700"
+            className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700"
           >
             <p className="text-md text-center">{card.text}</p>
           </div>

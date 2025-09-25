@@ -1,5 +1,3 @@
-// PS(8)
-
 import React, { useState, useEffect } from "react";
 import CustomAlert from "./CustomAlert"; // Importing the CustomAlert component
 import { useLocation, useNavigate } from "react-router-dom";
@@ -35,7 +33,7 @@ const Level8 = ({ setCompletedLevels }) => {
     array.push(selectedCards.text);
 
     console.log(array);
-    localStorage.setItem("origin", "level8", "level8Result", JSON.stringify(array));
+    localStorage.setItem("level8Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
 
     // Navigate to level 11
@@ -266,7 +264,7 @@ const showNextCard = () => {
       }}
     >
       {/* Icons on the top-right corner */}
-      <div className="absolute top-4 right-4 flex items-center gap-4">
+      <div className="absolute top-10 right-4 flex items-center gap-4">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaClock className="text-slate-50 text-xl sm:text-2xl" />
 
@@ -281,7 +279,7 @@ const showNextCard = () => {
       </div>
       <div className="flex items-center justify-between w-full">
         {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
-        <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
+        <h2 className="text-2xl font-bold text-slate-50 mx-auto mt-10"> {/* Added mt-10 to push header down */}
           Signs of bleeding(Haemotoxic Envenomation):
         </h2>
       </div>
@@ -291,10 +289,10 @@ const showNextCard = () => {
           {deck.map((card) => (
             <div
               key={card.id}
-              className="border w-48 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
+              className="border w-36 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200"
               onClick={() => selectCard(card, setSelectedCards)}
             >
-              <p>{card.text}</p>
+              <p className="text-xs break-words text-center">{card.text}</p> {/* Reduced font size to text-xs and used break-words */}
             </div>
           ))}
         </div>
@@ -309,7 +307,7 @@ const showNextCard = () => {
       <div className="mt-8 w-60 h-32 border-2 border-blue-500 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700">
         <p className="text-md text-center">{selectedCards.text}</p>
       </div>
-        {/* <div classNtext-slate-50ame="flex w-full mt-10">
+        {/* <div className="flex w-full mt-10">
           <h2 className="text-xl text-blue-600 font-bold">
             Time Remaining: {countdown} seconds
           </h2>
