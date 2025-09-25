@@ -42,6 +42,7 @@ const Level14 = ({ setCompletedLevels }) => {
     console.log(array);
     localStorage.setItem("level14Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
+    navigate("/result14");
   };
 
   useEffect(() => {
@@ -71,11 +72,14 @@ const Level14 = ({ setCompletedLevels }) => {
     { id: 4, text: "20 vials AVS" },
     { id: 5, text: "Transfer to referral hospital" },
     { id: 6, text: "Inj. Hydrocortisone" },
+    { id: 7, text: "artificial ventilation S.O.S"}
   ];
 
   const correctSequence = [
+    { id: 5, text: "Transfer to referral hospital" },
     { id: 1, text: "AN loading dose" },
     { id: 2, text: "10 vial AVS" },
+    { id: 7, text: "artificial ventilation S.O.S"}
   ];
 
   const shuffle = (array) => {
@@ -220,26 +224,25 @@ const Level14 = ({ setCompletedLevels }) => {
       </div>
 
       {showSuccessPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center">
-            <h2 className="text-2xl font-bold text-amber-600 mb-4">
-              Your choices are correct
-            </h2>
-            <button
-              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md "
-              onClick={() => handleSuccessClose("/level13")}
-            >
-              Situation 1: Improvement seen after 1 hour
-            </button>
-            <button
-              className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md "
-              onClick={() => handleSuccessClose("/level16")}
-            >
-              Situation 2: No improvement seen after 1 hour
-            </button>
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" // Added z-50 here
+          >
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center z-50">
+              <h2 className="text-2xl font-bold text-green-600 mb-4">
+                Your choices are correct
+              </h2>
+              {/* <h2 className="text-xl mb-4">
+                To start the game again click on the button below
+              </h2> */}
+              <button
+                className="bg-amber-950 text-white px-4 py-2 rounded-md "
+                onClick={handleSuccessClose}
+              >
+                Submit
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {showWrongPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

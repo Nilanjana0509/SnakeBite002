@@ -24,6 +24,7 @@ import Level15 from "./Levels/Level15";
 import Level16 from "./Levels/Level16";
 import FinalResult16 from "./Levels/Result16";
 import FinalResult5 from "./Levels/Result5";
+import FinalResult14 from "./Levels/Result14";
 import FinalResult15 from "./Levels/Result15";  
 import FinalResult12 from "./Levels/Result12";
 import FinalResult13 from "./Levels/Result13";
@@ -281,6 +282,7 @@ function App() {
           {/* Route for the final result */}
           <Route path="/result16" element={<FinalResult16 />} />
           <Route path="/result5" element={<FinalResult5 />} />
+          <Route path="/result14" element={<FinalResult14 />} />
           <Route path="/result15" element={<FinalResult15 />} />
           <Route path="/result12" element={<FinalResult12 />} />
           <Route path="/result13" element={<FinalResult13 />} />

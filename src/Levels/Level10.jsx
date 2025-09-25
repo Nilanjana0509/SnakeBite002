@@ -69,7 +69,7 @@ const Level10 = ({ setCompletedLevels }) => {
   ];
 
   const correctSequence = [
-    { id: 1, text: "AN maintenance dose" },
+    { id: 3, text: "AN loading dose" },
     { id: 2, text: "Wait for another 30 min for improvement" },
   ];
 
