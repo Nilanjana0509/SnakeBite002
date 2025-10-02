@@ -244,7 +244,7 @@ const Level1 = ({ setCompletedLevels }) => {
             <p className="mb-4 text-lg">
               By completing each path successfully, you will get a star.
             </p>
-            <p className="mb-4 text-lg">Collect 8 stars to complete the game.</p>
+            <p className="mb-4 text-lg">Collect 7 stars to complete the game.</p>
             <button
               className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md"
               onClick={startGame}

@@ -29,7 +29,7 @@ const Level2 = ({ setCompletedLevels }) => {
     { id: 8, text: "Start Antibiotics immediately" },
     { id: 9, text: "Sedate with Diazepam" },
     { id: 10, text: "10 WBCT" },
-    { id: 11, text: "20 WBCT (may be omitted in case of obvious signs of hemorrhage)" },
+    { id: 11, text: "20 WBCT\n(may be omitted in case of obvious signs of hemorrhage)" },
     { id: 12, text: "PT, INR" },
   ];
 
@@ -38,7 +38,7 @@ const Level2 = ({ setCompletedLevels }) => {
     { id: 2, text: "Admit the patient" },
     { id: 3, text: "Start IVF with NS/5D" },
     { id: 4, text: "Inj. Tetanus Toxoid" },
-    { id: 11, text: "20 WBCT (may be omitted in case of obvious signs of hemorrhage)" },
+    { id: 11, text: "20 WBCT\n(may be omitted in case of obvious signs of hemorrhage)" },
   ];
 
   const shuffleDeck = (deck) => {
@@ -184,7 +184,7 @@ const Level2 = ({ setCompletedLevels }) => {
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border w-36 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center"
+            className="border w-36 h-32 border-blue-500 p-4 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center whitespace-pre-line"
             onClick={() =>
               selectCard(
                 card,
@@ -216,7 +216,7 @@ const Level2 = ({ setCompletedLevels }) => {
             key={idx}
             className="border-2 border-blue-400 w-48 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700"
           >
-            <p className="text-md text-center">{card.text}</p>
+            <p className="text-md text-center whitespace-pre-line">{card.text}</p>
           </div>
         ))}
       </div>
