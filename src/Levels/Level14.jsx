@@ -11,6 +11,7 @@ const Level14 = ({ setCompletedLevels }) => {
   const [deckIndex, setDeckIndex] = useState(null); // Track the current deck index
   const [selectedCards1, setSelectedCards1] = useState({});
   const [selectedCards2, setSelectedCards2] = useState({});
+  const [selectedCards3, setSelectedCards3] = useState({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [result, SetResult] = useState([]);
@@ -39,6 +40,7 @@ const Level14 = ({ setCompletedLevels }) => {
     const array = [];
     array.push(selectedCards1.text);
     array.push(selectedCards2.text);
+    array.push(selectedCards3.text);
     console.log(array);
     localStorage.setItem("level14Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
@@ -77,7 +79,6 @@ const Level14 = ({ setCompletedLevels }) => {
 
   const correctSequence = [
     { id: 5, text: "Transfer to referral hospital" },
-    { id: 1, text: "AN loading dose" },
     { id: 2, text: "10 vial AVS" },
     { id: 7, text: "artificial ventilation S.O.S"}
   ];
@@ -99,11 +100,12 @@ const Level14 = ({ setCompletedLevels }) => {
   useEffect(() => {
     if (
       selectedCards1.text !== undefined &&
-      selectedCards2.text !== undefined
+      selectedCards2.text !== undefined &&
+      selectedCards3.text !== undefined
     ) {
       res();
     }
-  }, [selectedCards1, selectedCards2]);
+  }, [selectedCards1, selectedCards2, selectedCards3]);
 
   const selectCard = (card, boxSetter) => {
     if (!card || !card.text) return;
@@ -119,7 +121,7 @@ const Level14 = ({ setCompletedLevels }) => {
   };
 
   const res = () => {
-    const selectedCards = [selectedCards1.text, selectedCards2.text];
+    const selectedCards = [selectedCards1.text, selectedCards2.text, selectedCards3.text];
     const correctCards = correctSequence.map((card) => card.text);
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
@@ -144,6 +146,7 @@ const Level14 = ({ setCompletedLevels }) => {
   const resetGame = () => {
     setSelectedCards1({});
     setSelectedCards2({});
+    setSelectedCards3({});
     setDeck(initialDeck);
     setDeckIndex(0);
   };
@@ -191,6 +194,8 @@ const Level14 = ({ setCompletedLevels }) => {
                 selectCard(card, setSelectedCards1);
               } else if (!selectedCards2.text) {
                 selectCard(card, setSelectedCards2);
+              } else if (!selectedCards3.text) {
+                selectCard(card, setSelectedCards3);
               } else {
                 console.log("Both selections are filled.");
               }
@@ -220,6 +225,11 @@ const Level14 = ({ setCompletedLevels }) => {
           >
             <p className="text-md text-center">{selectedCards2.text}</p>
           </div>
+          <div
+            className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
+          >
+            <p className="text-md text-center">{selectedCards3.text}</p>
+          </div>
         </div>
       </div>
 
@@ -231,14 +241,14 @@ const Level14 = ({ setCompletedLevels }) => {
               <h2 className="text-2xl font-bold text-green-600 mb-4">
                 Your choices are correct
               </h2>
-              {/* <h2 className="text-xl mb-4">
+              <h2 className="text-xl mb-4">
                 To start the game again click on the button below
-              </h2> */}
+              </h2>
               <button
                 className="bg-amber-950 text-white px-4 py-2 rounded-md "
                 onClick={handleSuccessClose}
               >
-                Submit
+                Submit & Start Over
               </button>
             </div>
           </div>
