@@ -316,7 +316,7 @@ const Level13 = ({ setCompletedLevels }) => {
       <div className="flex items-center justify-between w-full my-6">
         {/* <h2 className="text-xl font-bold mx-auto mr-54">Choose card from deck</h2> */}
         <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
-          Options available when there is persistent improvement seen after 1 hour:
+          Options available when there is persistent improvement:
         </h2>
       </div>
 

@@ -282,7 +282,7 @@ const Level9 = ({ setCompletedLevels }) => {
     setShowSuccessPopup(false);
     handleCompleteLevel9(); // This should now be modified to navigate to Level 13
     // You can directly navigate to Level 13 here if that is the desired behavior
-    navigate("/level13", { state: { prev: location.state?.prev + '-' + 9 } });
+    navigate("/level17", { state: { prev: location.state?.prev + '-' + 9 } });
   };
 
   const resetGame = () => {

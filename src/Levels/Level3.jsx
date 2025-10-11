@@ -178,7 +178,7 @@ const Level3 = ({ setCompletedLevels }) => {
       </div>
 
       <p className="text-2xl font-bold text-slate-50 mx-auto text-center mt-4">
-        Various findings related to Snake bite have been listed below. Select from the following optionsconsidering one type of
+        Various findings related to Snake bite have been listed below. Select from the following options considering one type of
         envenomation to go to next level
       </p>
 

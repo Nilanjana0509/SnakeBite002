@@ -22,6 +22,8 @@ import Level13 from "./Levels/Level13";
 import Level14 from "./Levels/Level14";
 import Level15 from "./Levels/Level15";
 import Level16 from "./Levels/Level16";
+import Level17 from "./Levels/Level17";
+import Level18 from "./Levels/Level18";
 import FinalResult16 from "./Levels/Result16";
 import FinalResult5 from "./Levels/Result5";
 import FinalResult14 from "./Levels/Result14";
@@ -173,6 +175,28 @@ function App() {
               redirectTo="/level7"
             >
               <Level9 setCompletedLevels={setCompletedLevels} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/level17"
+          element={
+            <ProtectedRoute
+              completed={completedLevels.level9}
+              redirectTo="/level9"
+            >
+              <Level17 setCompletedLevels={setCompletedLevels} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/level18"
+          element={
+            <ProtectedRoute
+              completed={completedLevels.level10}
+              redirectTo="/level10"
+            >
+              <Level18 setCompletedLevels={setCompletedLevels} />
             </ProtectedRoute>
           }
         />

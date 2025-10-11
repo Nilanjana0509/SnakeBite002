@@ -12,6 +12,7 @@ const Level14 = ({ setCompletedLevels }) => {
   const [selectedCards1, setSelectedCards1] = useState({});
   const [selectedCards2, setSelectedCards2] = useState({});
   const [selectedCards3, setSelectedCards3] = useState({});
+  const [selectedCards4, setSelectedCards4] = useState({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
   const [result, SetResult] = useState([]);
@@ -41,6 +42,7 @@ const Level14 = ({ setCompletedLevels }) => {
     array.push(selectedCards1.text);
     array.push(selectedCards2.text);
     array.push(selectedCards3.text);
+    array.push(selectedCards4.text);
     console.log(array);
     localStorage.setItem("level14Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
@@ -68,7 +70,7 @@ const Level14 = ({ setCompletedLevels }) => {
   }, []);
 
   const initialDeck = [
-    { id: 1, text: "AN loading dose" },
+    { id: 1, text: "Second AN loading dose" },
     { id: 2, text: "10 vial AVS" },
     { id: 3, text: "AN maintenance dose" },
     { id: 4, text: "20 vials AVS" },
@@ -78,6 +80,7 @@ const Level14 = ({ setCompletedLevels }) => {
   ];
 
   const correctSequence = [
+    { id: 1, text: "Second AN loading dose" },
     { id: 5, text: "Transfer to referral hospital" },
     { id: 2, text: "10 vial AVS" },
     { id: 7, text: "artificial ventilation S.O.S"}
@@ -101,11 +104,12 @@ const Level14 = ({ setCompletedLevels }) => {
     if (
       selectedCards1.text !== undefined &&
       selectedCards2.text !== undefined &&
-      selectedCards3.text !== undefined
+      selectedCards3.text !== undefined &&
+      selectedCards4.text !== undefined 
     ) {
       res();
     }
-  }, [selectedCards1, selectedCards2, selectedCards3]);
+  }, [selectedCards1, selectedCards2, selectedCards3, selectedCards4]);
 
   const selectCard = (card, boxSetter) => {
     if (!card || !card.text) return;
@@ -121,7 +125,7 @@ const Level14 = ({ setCompletedLevels }) => {
   };
 
   const res = () => {
-    const selectedCards = [selectedCards1.text, selectedCards2.text, selectedCards3.text];
+    const selectedCards = [selectedCards1.text, selectedCards2.text, selectedCards3.text, selectedCards4.text];
     const correctCards = correctSequence.map((card) => card.text);
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
@@ -147,6 +151,7 @@ const Level14 = ({ setCompletedLevels }) => {
     setSelectedCards1({});
     setSelectedCards2({});
     setSelectedCards3({});
+    setSelectedCards4({});
     setDeck(initialDeck);
     setDeckIndex(0);
   };
@@ -180,7 +185,7 @@ const Level14 = ({ setCompletedLevels }) => {
       </div>
       <div className="flex items-center justify-between w-full my-6">
         <h2 className="text-2xl font-bold text-slate-50 mx-auto mr-50 mb-6">
-          No improvement at 1 hour:
+          No improvement after 1 hour:
         </h2>
       </div>
 
@@ -196,6 +201,8 @@ const Level14 = ({ setCompletedLevels }) => {
                 selectCard(card, setSelectedCards2);
               } else if (!selectedCards3.text) {
                 selectCard(card, setSelectedCards3);
+              } else if(!selectedCards4.text){
+                selectCard(card, setSelectedCards4);
               } else {
                 console.log("Both selections are filled.");
               }
@@ -229,6 +236,11 @@ const Level14 = ({ setCompletedLevels }) => {
             className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
           >
             <p className="text-md text-center">{selectedCards3.text}</p>
+          </div>
+          <div
+            className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
+          >
+            <p className="text-md text-center">{selectedCards4.text}</p>
           </div>
         </div>
       </div>

@@ -16,6 +16,7 @@ const Level2 = ({ setCompletedLevels }) => {
   const [selectedCards5, setSelectedCards5] = useState({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Only path selection popup
   const [showWrongPopup, setShowWrongPopup] = useState(false);
+  const [showFinalSuccessPopup, setShowFinalSuccessPopup] = useState(false);
   const [starCount, setStarCount] = useState(0);
 
   const initialDeck = [
@@ -73,6 +74,9 @@ const Level2 = ({ setCompletedLevels }) => {
     const data = JSON.parse(localStorage.getItem("path")) || {};
     const trueCount = Object.values(data).filter(value => value === true).length;
     setStarCount(trueCount);
+    if(trueCount == 7){
+      setShowFinalSuccessPopup(true);
+    }
   }, []);
 
   const selectCard = (card, boxSetter) => {
@@ -159,6 +163,26 @@ const Level2 = ({ setCompletedLevels }) => {
     console.log("Navigating to:", path);
     navigate(path, { state: { prev: location.state?.prev + '-2' || "1-2" } });
   };
+  const confirmExit = () => {
+    localStorage.clear();
+    const resetData = {
+      "1-2-3-5": false,
+      "1-2-3-4-6-11-15": false,
+      "1-2-3-4-6-11-12": false,
+      "1-2-3-4-6-12": false,
+      "1-2-3-4-6-7-9-13": false,// add new level after 9
+      "1-2-3-4-6-7-10-13": false,// add new level after 10 //improvement
+      "1-2-3-4-6-7-10-14": false
+      // "1-2-3-4-6-7-10-14-13": false,
+      // "1-2-3-4-6-7-10-14-16": false
+    };
+    localStorage.setItem("path", JSON.stringify(resetData));
+    window.location.href = window.location.origin;
+  };
+
+  // const closeCromeModal = () => {
+  //   window.location.href = "about:blank";
+  // }
 
   return (
     <div
@@ -243,6 +267,30 @@ const Level2 = ({ setCompletedLevels }) => {
             >
               Possible Envenomation
             </button>
+          </div>
+        </div>
+      )}
+
+      {showFinalSuccessPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div style={{ border: '2px solid #1E90FF', padding: '20px', backgroundColor: 'white', width: '400px', textAlign: 'center' }}>
+            <h2 style={{ color: '#FFA500' }}>Congratulations, You are completed 7 star</h2>
+            <button
+              onClick={() => {
+                confirmExit();
+              }}
+              style={{ display: 'block', margin: '10px auto', backgroundColor: '#5C4033', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}
+            >
+              click to play again
+            </button>
+             {/* <button
+              onClick={() => {
+                closeCromeModal();
+              }}
+              style={{ display: 'block', margin: '10px auto', backgroundColor: '#5C4033', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}
+            >
+              Exit the game
+            </button> */}
           </div>
         </div>
       )}

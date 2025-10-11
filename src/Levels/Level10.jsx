@@ -62,14 +62,14 @@ const Level10 = ({ setCompletedLevels }) => {
   const initialDeck = [
     { id: 1, text: "AN maintenance dose" },
     { id: 2, text: "Wait for another 30 min for improvement" },
-    { id: 3, text: "AN loading dose" },
+    { id: 3, text: "First AN loading dose" },
     { id: 4, text: "Wait for 1 hour" },
     { id: 5, text: "Transfer to referral hospital" },
     { id: 6, text: "Ventilator Support" },
   ];
 
   const correctSequence = [
-    { id: 3, text: "AN loading dose" },
+    { id: 3, text: "First AN loading dose" },
     { id: 2, text: "Wait for another 30 min for improvement" },
   ];
 
@@ -237,7 +237,7 @@ const Level10 = ({ setCompletedLevels }) => {
             </h2>
             <button
               className="mt-4 bg-amber-950 text-white px-4 py-2 rounded-md "
-              onClick={() => handleSuccessClose("/level13")}
+              onClick={() => handleSuccessClose("/level18")}
             >
               Situation 1: Improvement seen after 1 hour
             </button>
