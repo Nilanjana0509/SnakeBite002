@@ -62,14 +62,14 @@ const Level10 = ({ setCompletedLevels }) => {
   const initialDeck = [
     { id: 1, text: "AN maintenance dose" },
     { id: 2, text: "Wait for another 30 min for improvement" },
-    { id: 3, text: "First AN loading dose" },
+    { id: 3, text: "Second AN Loading Dose"},
     { id: 4, text: "Wait for 1 hour" },
     { id: 5, text: "Transfer to referral hospital" },
     { id: 6, text: "Ventilator Support" },
   ];
 
   const correctSequence = [
-    { id: 3, text: "First AN loading dose" },
+    { id: 3, text: "Second AN Loading Dose"},
     { id: 2, text: "Wait for another 30 min for improvement" },
   ];
 

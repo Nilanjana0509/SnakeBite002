@@ -80,7 +80,6 @@ const Level14 = ({ setCompletedLevels }) => {
   ];
 
   const correctSequence = [
-    { id: 1, text: "Second AN loading dose" },
     { id: 5, text: "Transfer to referral hospital" },
     { id: 2, text: "10 vial AVS" },
     { id: 7, text: "artificial ventilation S.O.S"}
@@ -125,7 +124,7 @@ const Level14 = ({ setCompletedLevels }) => {
   };
 
   const res = () => {
-    const selectedCards = [selectedCards1.text, selectedCards2.text, selectedCards3.text, selectedCards4.text];
+    const selectedCards = [selectedCards2.text, selectedCards3.text, selectedCards4.text];
     const correctCards = correctSequence.map((card) => card.text);
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
@@ -148,7 +147,7 @@ const Level14 = ({ setCompletedLevels }) => {
   };
 
   const resetGame = () => {
-    setSelectedCards1({});
+    // setSelectedCards1({});
     setSelectedCards2({});
     setSelectedCards3({});
     setSelectedCards4({});
@@ -158,7 +157,7 @@ const Level14 = ({ setCompletedLevels }) => {
 
   const res1 = (card) => {
     console.log(card);
-    setSelectedCards1({});
+    // setSelectedCards1({});
     const newCards = [...deck, card];
     setDeck(newCards);
   };
@@ -195,9 +194,7 @@ const Level14 = ({ setCompletedLevels }) => {
             key={card.id}
             className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
             onClick={() => {
-              if (!selectedCards1.text) {
-                selectCard(card, setSelectedCards1);
-              } else if (!selectedCards2.text) {
+             if (!selectedCards2.text) {
                 selectCard(card, setSelectedCards2);
               } else if (!selectedCards3.text) {
                 selectCard(card, setSelectedCards3);
@@ -221,12 +218,12 @@ const Level14 = ({ setCompletedLevels }) => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 mt-4">
-          <div
+          {/* <div
             className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
             onClick={() => res1(selectedCards1)}
           >
             <p className="text-md text-center">{selectedCards1.text}</p>
-          </div>
+          </div> */}
           <div
             className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
           >
