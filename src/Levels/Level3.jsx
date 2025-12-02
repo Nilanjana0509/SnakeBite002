@@ -162,9 +162,9 @@ const Level3 = ({ setCompletedLevels }) => {
 
   return (
     <div
-      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
-      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
-    >
+          className="p-4 sm:p-6 flex flex-col items-center relative h-screen w-full overflow-auto"
+          style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
+        >
       <div className="absolute top-4 left-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
           <FaStar className="text-yellow-500 text-xl sm:text-2xl" />

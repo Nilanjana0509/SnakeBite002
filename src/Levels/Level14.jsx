@@ -42,7 +42,7 @@ const Level14 = ({ setCompletedLevels }) => {
     array.push(selectedCards1.text);
     array.push(selectedCards2.text);
     array.push(selectedCards3.text);
-    array.push(selectedCards4.text);
+    // array.push(selectedCards4.text);
     console.log(array);
     localStorage.setItem("level14Result", JSON.stringify(array));
     setCompletedLevels(completedLevels);
@@ -103,12 +103,11 @@ const Level14 = ({ setCompletedLevels }) => {
     if (
       selectedCards1.text !== undefined &&
       selectedCards2.text !== undefined &&
-      selectedCards3.text !== undefined &&
-      selectedCards4.text !== undefined 
+      selectedCards3.text !== undefined
     ) {
       res();
     }
-  }, [selectedCards1, selectedCards2, selectedCards3, selectedCards4]);
+  }, [selectedCards1, selectedCards2, selectedCards3]);
 
   const selectCard = (card, boxSetter) => {
     if (!card || !card.text) return;
@@ -124,7 +123,7 @@ const Level14 = ({ setCompletedLevels }) => {
   };
 
   const res = () => {
-    const selectedCards = [selectedCards2.text, selectedCards3.text, selectedCards4.text];
+    const selectedCards = [selectedCards1.text, selectedCards2.text, selectedCards3.text];
     const correctCards = correctSequence.map((card) => card.text);
     const isCorrect = selectedCards.every((selectedCard) =>
       correctCards.includes(selectedCard)
@@ -147,10 +146,10 @@ const Level14 = ({ setCompletedLevels }) => {
   };
 
   const resetGame = () => {
-    // setSelectedCards1({});
+    setSelectedCards1({});
     setSelectedCards2({});
     setSelectedCards3({});
-    setSelectedCards4({});
+    // setSelectedCards4({});
     setDeck(initialDeck);
     setDeckIndex(0);
   };
@@ -194,12 +193,12 @@ const Level14 = ({ setCompletedLevels }) => {
             key={card.id}
             className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
             onClick={() => {
-             if (!selectedCards2.text) {
+             if (!selectedCards1.text) {
+                selectCard(card, setSelectedCards1);
+              } else if (!selectedCards2.text) {
                 selectCard(card, setSelectedCards2);
-              } else if (!selectedCards3.text) {
+              } else if(!selectedCards3.text){
                 selectCard(card, setSelectedCards3);
-              } else if(!selectedCards4.text){
-                selectCard(card, setSelectedCards4);
               } else {
                 console.log("Both selections are filled.");
               }
@@ -218,12 +217,12 @@ const Level14 = ({ setCompletedLevels }) => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-8 mt-4">
-          {/* <div
+          <div
             className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
             onClick={() => res1(selectedCards1)}
           >
             <p className="text-md text-center">{selectedCards1.text}</p>
-          </div> */}
+          </div>
           <div
             className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
           >
@@ -234,11 +233,11 @@ const Level14 = ({ setCompletedLevels }) => {
           >
             <p className="text-md text-center">{selectedCards3.text}</p>
           </div>
-          <div
+          {/* <div
             className="border-2 border-blue-400 w-40 h-24 flex items-center justify-center bg-gray-100 rounded-lg shadow-md text-gray-700 transition-transform transform hover:scale-105"
           >
             <p className="text-md text-center">{selectedCards4.text}</p>
-          </div>
+          </div> */}
         </div>
       </div>
 

@@ -205,7 +205,7 @@ const Level1 = ({ setCompletedLevels }) => {
 
   return (
     <div
-      className="relative w-full h-full overflow-auto"
+className={`relative w-full ${gameStarted ? "h-screen" : "h-full"} overflow-auto`}
       style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
     >
       {showImage && (

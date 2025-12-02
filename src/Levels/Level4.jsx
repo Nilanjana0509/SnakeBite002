@@ -209,11 +209,8 @@ const Level4 = ({ setCompletedLevels }) => {
 
   return (
     <div
-      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-      }}
+      className="p-4 sm:p-6 flex flex-col items-center relative h-screen w-full overflow-auto"
+      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: "cover" }}
     >
       {/* Star count on the top-left corner */}
       <div className="absolute top-10 left-4 flex items-center gap-4">
