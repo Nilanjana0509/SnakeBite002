@@ -72,7 +72,6 @@ const Level14 = ({ setCompletedLevels }) => {
   const initialDeck = [
     { id: 1, text: "Second AN loading dose" },
     { id: 2, text: "10 vial AVS" },
-    { id: 3, text: "AN maintenance dose" },
     { id: 4, text: "20 vials AVS" },
     { id: 5, text: "Transfer to referral hospital" },
     { id: 6, text: "Inj. Hydrocortisone" },
@@ -163,7 +162,7 @@ const Level14 = ({ setCompletedLevels }) => {
 
   return (
     <div
-      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
+      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-screen overflow-auto"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",

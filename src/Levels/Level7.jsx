@@ -262,7 +262,7 @@ const Level7 = ({ setCompletedLevels }) => {
 
   return (
     <div
-      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-full overflow-auto"
+      className="p-4 sm:p-6 flex flex-col items-center relative w-full h-screen overflow-auto"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
