@@ -35,7 +35,7 @@ const Level1 = ({ setCompletedLevels }) => {
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("path")) || {};
     const trueCount = Object.values(data).filter(value => value === true).length;
-    setStarCount(trueCount);
+    setStarCount(0);
   }, []);
 
   useEffect(() => {
