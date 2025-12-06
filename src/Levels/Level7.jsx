@@ -68,7 +68,7 @@ const Level7 = ({ setCompletedLevels }) => {
 
   const initialDeck = [
     { id: 1, text: "Loading Atropine IV Neostigmine IM or IV" },
-    { id: 2, text: "Atropine IV Neostigmine IM or IV maintenance dose" },
+    // { id: 2, text: "Atropine IV Neostigmine IM or IV maintenance dose" },
     { id: 3, text: "Loading Atropine IM Neostigmine IM or IV" },
     { id: 4, text: "Atropine IV" },
     { id: 5, text: "Neostigmine IM or IV" },
@@ -297,11 +297,11 @@ const Level7 = ({ setCompletedLevels }) => {
 
 
       {/* Display all deck cards in a grid format */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-10 mx-auto">
+      <div className="flex flex-wrap  gap-2 sm:gap-3 mb-10">
         {deck.map((card) => (
           <div
             key={card.id}
-            className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-2"
+            className="border border-blue-500 bg-gray-100 rounded-lg text-center cursor-pointer hover:bg-gray-200 flex justify-center items-center text-sm sm:text-base p-7"
             onClick={() => selectCard(card, setSelectedCards)}
           >
             <p>{card.text}</p>
